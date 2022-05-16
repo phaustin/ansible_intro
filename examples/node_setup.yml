@@ -5,14 +5,25 @@
     key_path:
       - '/.ssh/tlef_key1.pub'
       - '/.ssh/tlef_summer.pub'
+    user: 'jovyan'
+    dest: /tmp/m2
+    root_prefix: /home/jovyan/mini39
+    packages:
+      - mamba
+      - python=3.9
   tasks:
     - name: Set authorized key taken from file
       ansible.posix.authorized_key:
-        user: jovyan
+        user: '{{ user }}'
         state: present
         exclusive: False
         key: "{{ lookup('file', lookup('env','HOME') + item ) }}"
-      tags: step1
-      loop: "{{ key_path }}"
+      tags:
+        'step1'
+      loop: '{{ key_path }}'
+  roles:
+    - mambaorg.micromamba
+    
+    
 
-      
+
