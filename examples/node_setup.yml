@@ -1,18 +1,15 @@
 ---
 - hosts: all
-  become: true
   vars:
-    key_path:
-      - '/.ssh/tlef_key1.pub'
-      - '/.ssh/tlef_summer.pub'
     user: 'jovyan'
-    packages:
-      - mamba
-      - python=3.9
-      - numpy
-      - pandas
+  remote_user: "{{ user }}"
   tasks:
     - name: Set authorized key taken from file
+      vars:
+        key_path:
+          - '/.ssh/tlef_key1.pub'
+          - '/.ssh/tlef_summer.pub'
+          - '/.ssh/phil_git.pub'
       ansible.posix.authorized_key:
         user: '{{ user }}'
         state: present
@@ -25,7 +22,14 @@
     - role: mambaorg.micromamba
       vars: 
         root_prefix: /home/jovyan/mini39
-    
-    
+        root_prefix_condarc:
+          channels:
+            - conda-forge
+        packages:
+          - mamba
+          - python=3.9
+          - numpy
+          - pandas
+          - fsspec
 
 
