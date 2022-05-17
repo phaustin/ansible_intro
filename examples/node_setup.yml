@@ -3,7 +3,7 @@
   vars:
     user: 'jovyan'
   remote_user: "{{ user }}"
-  tasks:
+  pre_tasks:
     - name: Set authorized key taken from file
       vars:
         key_path:
@@ -18,16 +18,20 @@
       tags:
         'step1'
       loop: '{{ key_path }}'
+  post_tasks:
+    - name: conda init bashrc
+      shell: |
+        /home/jovyan/mini_3_10/condabin/conda init bash
   roles:
     - role: mambaorg.micromamba
       vars: 
-        root_prefix: /home/jovyan/mini39
+        root_prefix: /home/jovyan/mini_3_10
         root_prefix_condarc:
           channels:
             - conda-forge
         packages:
           - mamba
-          - python=3.9
+          - python=3.10
           - numpy
           - pandas
           - fsspec
