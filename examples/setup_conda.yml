@@ -1,0 +1,41 @@
+---
+- hosts: all
+  vars:
+    conda_prefix: ~/mini3_10
+  pre_tasks:
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: ~/bin
+        state: directory
+        mode: '0755'
+    - name: Adding the path in the bashrc files
+      #https://stackoverflow.com/questions/27733511/
+      #how-to-set-linux-environment-variables-with-ansible
+      lineinfile:
+        dest: ~/.bashrc
+        line: 'export PATH=$PATH:${HOME}/bin'
+        insertafter: 'EOF'
+        regexp: 'export PATH=\$PATH:${HOME}/bin'
+        state: present
+ 
+  post_tasks:
+    - name: conda init bashrc
+      shell: |
+        {{ conda_prefix }}/condabin/conda init bash
+  roles:
+    # https://github.com/mamba-org/ansible-role-micromamba
+    - role: mambaorg.micromamba
+      vars: 
+        root_prefix: "{{ conda_prefix }}"
+        dest: ~/bin/micromamba
+        root_prefix_condarc:
+          channels:
+            - conda-forge
+        packages:
+          - mamba
+          - python=3.10
+          - numpy
+          - pandas
+          - fsspec
+
+

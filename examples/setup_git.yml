@@ -1,0 +1,13 @@
+---
+- hosts: all
+  vars:
+    gitcreds: |
+      export GH_SCOPED_CREDS_CLIENT_ID=Iv1.a7bfeeb8a061168a
+      export GH_SCOPED_CREDS_APP_URL=https://github.com/apps/tlef-auth
+
+  tasks:
+    - blockinfile:
+        create: false
+        dest: "~/.bashrc"
+        block: "{{ gitcreds }}"
+

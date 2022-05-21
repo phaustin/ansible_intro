@@ -1,0 +1,126 @@
+#################################################
+# DO Community Playbooks: Initial Server Setup
+# https://github.com/do-community/ansible-playbooks.git
+# to run
+# ansible-playbook  -i hosts.yml -u root -l do1x setup_ubuntu2004.yml
+#################################################
+---
+- hosts: all
+  become: true
+  vars:
+    new_user: 'jovyan'
+    new_user_uid: '1003'
+  tasks:
+    - name: Install Prerequisites
+      apt: name=aptitude update_cache=yes state=latest force_apt_get=yes
+      tags:
+        - addpackages
+
+# Sudo Group Setup
+    - name: Make sure we have  'wheel'  and 'docker' groups
+      group:
+        name: "{{ item.name }}"
+        state: present
+      with_items:
+        - { name: 'docker'}
+        - { name: 'wheel' }
+        - { name: 'sudo' }
+      tags:
+        - addgroup
+
+    - name: Allow 'wheel' group to have passwordless sudo
+      lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        validate: '/usr/sbin/visudo -cf %s'
+      tags:
+        - addgroup
+
+# User + Key Setup
+    - name: Create a new regular user with sudo privileges
+      user:
+        name: "{{ new_user }}"
+        state: present
+        groups: wheel,docker
+        append: true
+        create_home: true
+        uid: "{{ new_user_uid }}"
+        shell: /bin/bash
+      tags:
+        - adduser
+
+    - name: Set authorized keys for remote user
+      vars:
+        key_path:
+          - '/.ssh/tlef_key1.pub'
+          - '/.ssh/tlef_summer.pub'
+      ansible.posix.authorized_key:
+        user: "{{ new_user }}"
+        state: present
+        key: "{{ lookup('file', lookup('env','HOME') + item ) }}"
+        exclusive: False
+      loop: '{{ key_path }}'
+      tags:
+        - adduser
+
+    - name: Disable password authentication for root
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin prohibit-password'
+      tags:
+        - adduser
+
+# Install Packages
+    - name: Update apt
+      apt: update_cache=yes
+
+    - name: Install required system packages
+      vars:
+        sys_packages: [ 'curl', 'vim', 'git', 'ufw', 'apache2-utils']
+      apt: name={{ sys_packages }} state=latest
+      tags:
+        - addpackages
+
+#https://github.com/christurnerio/digital-ocean-ansible/blob/master/tasks/ufw.yml
+# now https://docs.ansible.com/ansible/latest/collections/community/general/ufw_module.html
+# UFW Setup
+# to verify ufw configuration run:
+# sudo ufw status verbose
+    - name: Install ufw
+      apt: package=ufw state=present
+
+    - name: Configure ufw defaults
+      ufw: direction={{ item.direction }} policy={{ item.policy }}
+      with_items:
+        - { direction: 'incoming', policy: 'deny' }
+        - { direction: 'outgoing', policy: 'allow' }
+      notify:
+        - restart ufw
+      tags:
+        - firewall
+
+    - name: Configure ufw rules
+      ufw: rule={{ item.rule }} port={{ item.port }} proto={{ item.proto }}
+      with_items:
+        - { rule: 'limit', port: '{{ ssh_port | default("22") }}', proto: 'tcp' }
+        - { rule: 'allow', port: '80', proto: 'tcp' }
+        - { rule: 'allow', port: '443', proto: 'tcp' }
+      notify:
+        - restart ufw
+      tags:
+        - firewall
+
+    - name: Enable ufw logging
+      ufw: logging=on
+      tags:
+        - firewall
+
+    - name: Enable ufw
+      ufw: state=enabled
+      tags:
+        - firewall
+
