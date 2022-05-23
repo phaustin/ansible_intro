@@ -1,0 +1,20 @@
+---
+- hosts: all
+  vars:
+    root_domain: phaustin.org
+    path_prefix_whoami1: try1
+    path_prefix_whoami2: try2
+    network_name: traefik_net
+    user_and_pw: 'eoas:$2y$05$2N25nFVO13/Xxv4JUetyou5eo2xnrZ5rUHXJF0/P59gwZUGgZUdrC'
+  tasks:
+    - name: move proxy templates to ~/repos/addon_containers
+      template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      loop:
+        - { src:'files/docker-compose-proxy.j2', dest:'~/repos/addon_containers/docker-compose-proxy.yml' }
+        - { src:'files/traefik.j2', dest:'~/repos/addon_containers/traefik/config/traefik.yml' }
+        - { src:'files/middleware.j2', dest:'~/repos/addon_containers/dynamic/middleware.yml' }
+        - { src:'files/routers.j2', dest:'~/repos/addon_containers/dynamic/routers.yml' }
+
+
