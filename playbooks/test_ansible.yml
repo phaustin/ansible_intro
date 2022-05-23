@@ -7,9 +7,29 @@
     network_name: traefik_net
     user_and_pw: 'eoas:$2y$05$2N25nFVO13/Xxv4JUetyou5eo2xnrZ5rUHXJF0/P59gwZUGgZUdrC'
   tasks:
-    - name: Register loop output as a variable
-      ansible.builtin.shell: "echo {{ item }}"
+    #https://stackoverflow.com/questions/67303471/ansible-use-stdout-lines-from-registered-variable-which-uses-loop-in-shell-modu
+    - name: test loop
+      ansible.builtin.shell: "echo testing_loop_{{ item }}"
       loop:
         - "one"
         - "two"
-      register: echo 
+      register: loop_test
+      
+    - name: print loop_test result
+      debug:
+        msg: "stdout_lines: {{ item.stdout_lines }}"
+      when: "item.stdout_lines | length > 0"
+      loop: "{{ loop_test.results }}"
+      
+    - name: test dictionary
+      ansible.builtin.shell: "echo testing_dict_{{ item.src }}"
+      loop:
+        - { src: "one" }
+        - { src: "two" }
+      register: dict_test
+
+    - name: print  result
+      debug:
+        msg: "stdout_lines: {{ item.stdout_lines }}"
+      when: "item.stdout_lines | length > 0"
+      loop: "{{ dict_test.results }}"
