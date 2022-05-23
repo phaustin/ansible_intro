@@ -22,10 +22,10 @@
       loop: "{{ loop_test.results }}"
       
     - name: test dictionary
-      ansible.builtin.shell: "echo testing_dict_{{ item.src }}"
+      ansible.builtin.shell: "echo testing_dict_{{ item.src }}  and  testing_dict__{{ item.dest }} "
       loop:
-        - { src: "one" }
-        - { src: "two" }
+        - { src: "one" , dest: 'alpha' }
+        - { src: "two" , dest: 'beta' }
       register: dict_test
 
     - name: print  result
