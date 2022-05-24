@@ -53,3 +53,7 @@ ansible-vault encrypt --encrypt-vault-id traefik vault.yml
 
 * move [dot_ansible.cfg](dot_ansible.cfg) to **~/.ansible.cfg**
 
+## Plotly dashbooard:
+
+* https://phaustin/co2mlo
+
