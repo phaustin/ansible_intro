@@ -47,7 +47,7 @@ echo 'my_vault_password' > ~/.vault_pass
 
 ansible-config   init --disabled -t all > ~/.ansible.cfg
 
-ansible-vault encrypt --encryhpt-vault-id traefik vault.yml
+ansible-vault encrypt --encrypt-vault-id traefik vault.yml
 
 ### Configuration
 
