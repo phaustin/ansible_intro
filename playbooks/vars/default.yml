@@ -48,7 +48,7 @@ traefik_template_list:
   - { src: "files/routers.j2" , dest: "{{ git_remote_path }}/traefik/config/dynamic/routers.yml" }
 
 dashboard_template_list:
-  - { src: "files/docker-compose.j2" , dest: "{{ git_remote_path }}/docker-compose.yml"}
+  - { src: "files/docker-compose.j2" , dest: "{{ git_remote_path }}/dashboards/docker-compose.yml"}
 #
 # start_traefik.yml
 #
