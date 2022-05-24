@@ -10,7 +10,10 @@
         DO_AUTH_TOKEN: "{{ DO_AUTH_TOKEN }}"
       register: envvar_test
       args:
-        chdir: ~/repos/addon_containers
+        chdir: "{{ git_remote_path }}"
         executable: /bin/bash
 
+    # - name: print envvar result
+    #   debug:
+    #     msg: "stdout: {{ envvar_test.stdout }}"
 
