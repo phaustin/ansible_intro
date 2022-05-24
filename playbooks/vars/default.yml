@@ -24,9 +24,9 @@ git_username:
 git_email:
   "paustin@eoas.ubc.ca"
 github_repo:
-  "https://github.com/phaustin/addon_containers.git"
+  "https://github.com/phaustin/ansible_intro.git"
 git_remote_repos: "~/repos"
-git_remote_path: "{{ git_remote_repos }}/addon_containers"
+git_remote_path: "{{ git_remote_repos }}/ansible_intro"
 #
 # setup_traefik.yml
 #
