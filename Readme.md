@@ -18,10 +18,10 @@ This repository contains a set of ansible playbooks that builds a docker-powered
 ## Execute the playbooks
 
 * cd playbooks
-* ansible-playbook  -i hosts.yml -u root -l do1x [setup_jovyan.yml](playbooks/do1x setup_jovyan.yml)  
-* ansible-playbook  -i hosts.yml -u root -l do1x [setup_docker.yml](playbooks/do1x setup_docker.yml)  
-* ansible-playbook  -i hosts.yml -u jovyan -l do1x [setup_conda.yml](playbooks/do1x setup_conda.yml)  
-* ansible-playbook -i hosts.yml -u jovyan -l do1x [setup_git.yml](playbooks/do1x setup_git.yml)  
+* ansible-playbook  -i hosts.yml -u root -l do1x [setup_jovyan.yml](playbooks/setup_jovyan.yml)  
+* ansible-playbook  -i hosts.yml -u root -l do1x [setup_docker.yml](playbooks/setup_docker.yml)  
+* ansible-playbook  -i hosts.yml -u jovyan -l do1x [setup_conda.yml](playbooks/setup_conda.yml)  
+* ansible-playbook -i hosts.yml -u jovyan -l do1x [setup_git.yml](playbooks/setup_git.yml)  
 * ansible-playbook -i hosts.yml -u jovyan -l do1x [setup_traefik.yml](playbooks/setup_traefik.yml)  
 * ansible-playbook -i hosts.yml -u jovyan -l do1x  [start_traefik.yml](playbooks/start_traefik.yml)  
 * ansible-playbook -i hosts.yml -u jovyan -l do1x  [setup_dashboards.yml](playbooks/setup_dashboards.yml)  
