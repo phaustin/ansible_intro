@@ -2,8 +2,8 @@
 - hosts: all
   vars:
     root_domain: phaustin.org
-    path_prefix_whoami1: try1
-    path_prefix_whoami2: try2
+    path_prefix_whoami1: try3
+    path_prefix_whoami2: try4
     network_name: traefik_net
     user_and_pw: 'eoas:$2y$05$2N25nFVO13/Xxv4JUetyou5eo2xnrZ5rUHXJF0/P59gwZUGgZUdrC'
   tasks:

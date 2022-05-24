@@ -28,8 +28,19 @@
         - { src: "two" , dest: 'beta' }
       register: dict_test
 
-    - name: print  result
+    - name: print dict_test result
       debug:
         msg: "stdout_lines: {{ item.stdout_lines }}"
       when: "item.stdout_lines | length > 0"
       loop: "{{ dict_test.results }}"
+
+    - name: Echo my_env_var
+      shell: "echo $MY_ENV_VARIABLE"
+      environment:
+        MY_ENV_VARIABLE: whatever_value
+      register: envvar_test
+
+    - name: print envvar result
+      debug:
+        msg: "stdout: {{ envvar_test.stdout }}"
+

@@ -6,7 +6,21 @@
       export GH_SCOPED_CREDS_APP_URL=https://github.com/apps/tlef-auth
 
   tasks:
-    - blockinfile:
+    - name: add global gitconfig user.email
+      community.general.git_config:
+        name: user.email
+        scope: global
+        value: "paustin@eoas.ubc.ca"
+
+    - name: add global git user.name
+      community.general.git_config:
+        name: user.name
+        scope: global
+        value: "Philip Austin"
+    
+    - name: write credentials to .bashrc 
+      blockinfile:
+        marker: "ansible gitcreds_block"
         create: false
         dest: "~/.bashrc"
         block: "{{ gitcreds }}"
