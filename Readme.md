@@ -55,5 +55,5 @@ ansible-vault encrypt --encrypt-vault-id traefik vault.yml
 
 ## Plotly dashbooard:
 
-* https://phaustin/co2mlo
+* https://phaustin.org/co2mlo
 
