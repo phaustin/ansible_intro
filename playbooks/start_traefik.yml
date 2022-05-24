@@ -1,11 +1,12 @@
 ---
 - hosts: all
+  vars_files:
+    - vars/default.yml
   tasks:
-
     - name: start traefik
       shell: "docker-compose -f docker-compose-proxy.yml up -d"
       environment:
-        DO_AUTH_TOKEN: "e5c493f1c8e9d264cc5d7c5dfe2809fd264f5efd73d1d07d7b0f40c716e4bb21"
+        DO_AUTH_TOKEN: "{{ DO_AUTH_TOKEN }}"
       register: envvar_test
       args:
         chdir: ~/repos/addon_containers
