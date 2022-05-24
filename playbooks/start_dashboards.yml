@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+    - name: start dashbords
+      shell: "docker-compose -f docker-compose.yml up -d"
+      register: dashboard_status
+      args:
+        chdir: ~/repos/addon_containers
+        executable: /bin/bash
+
+

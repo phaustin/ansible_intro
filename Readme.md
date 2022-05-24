@@ -28,5 +28,6 @@ https://www.digitalocean.com/community/tutorials/how-to-use-vault-to-protect-sen
 
 echo 'my_vault_password' > ~/.vault_pass
 
-ansible-vault encrypt_string --vault-password-file ~/.vault_pass e5c493f1c8e9d264cc5d7c5dfe2809fd264f5efd73d1d07d7b0f40c716e4bb21 --name DO_AUTH_TOKEN --output ~/encrypt.txt
+ansible-config   init --disabled -t all > ~/.ansible.cfg
+
 

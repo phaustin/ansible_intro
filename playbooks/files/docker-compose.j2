@@ -1,0 +1,250 @@
+version: '3.7'
+
+services:
+
+  base_image:
+    image: phaustin/base_addon:apr9incr
+    build:
+      context: base_image
+    container_name: base_addon_apr9incr
+    labels:
+      - "traefik.enable=false"
+
+  cmip6lowcloud:
+    build:
+      context: cmip6_lowcloud
+      dockerfile: Dockerfile
+    image: phaustin/cmip6lowcloud:nov19incr
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.cmip6lowcloud.rule=Host(`{{ dashboard_domain }}`) && PathPrefix(`/cmip6-lowcloud`)
+      - traefik.http.routers.cmip6lowcloud.tls=true
+      - traefik.http.routers.cmip6lowcloud.tls.certresolver=lets-encrypt
+      - traefik.http.routers.cmip6lowcloud.service=cmip6lowcloud
+      - traefik.http.services.cmip6lowcloud.loadbalancer.server.port=8050
+      - traefik.http.routers.cmip6lowcloud.middlewares=cmip6lowcloud-stripprefix
+      - traefik.http.middlewares.cmip6lowcloud-stripprefix.stripprefix.forceSlash=true
+      - traefik.http.middlewares.cmip6lowcloud-stripprefix.stripprefix.prefixes=/cmip6-lowcloud
+    container_name: cmip6lowcloud
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./cmip6_dashdir:/home/jovyan/dashdir
+    networks:
+      - {{ network_name }}
+    working_dir: /home/jovyan/dashdir
+    command: gunicorn --workers=10 --threads=2 -b 0.0.0.0:8050 app:server
+    # command: python app.py
+    # command: tail -F anything
+
+  hello_world:
+    build:
+      context: hello-world
+      dockerfile: Dockerfile
+    image: phaustin/hello_world:aug20
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.hello_world.rule=Host(`dashboard.eoastest.xyz`) && PathPrefix(`/hello`)
+      - traefik.http.routers.hello_world.tls=true
+      - traefik.http.routers.hello_world.tls.certresolver=lets-encrypt
+      - traefik.http.routers.hello_world.service=hello_world
+      - traefik.http.services.hello_world.loadbalancer.server.port=8050
+      - traefik.http.routers.hello_world.middlewares=hello_world-stripprefix
+      - traefik.http.middlewares.hello_world-stripprefix.stripprefix.forceSlash=true
+      - traefik.http.middlewares.hello_world-stripprefix.stripprefix.prefixes=/hello
+    container_name: hello_world
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - {{ network_name }}
+    working_dir: /home/jovyan/dashdir
+    command: gunicorn --workers=10 --threads=2 -b 0.0.0.0:8050 app:server
+
+  hydro:
+    build:
+      context: hydro-ucflow
+      dockerfile: Dockerfile
+    image: phaustin/hydro:nov23
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.hydro.rule=Host(`{{ dashboard_domain }}`) && PathPrefix(`/hydro`)
+      - traefik.http.routers.hydro.tls=true
+      - traefik.http.routers.hydro.tls.certresolver=lets-encrypt
+      - traefik.http.routers.hydro.service=hydro
+      - traefik.http.services.hydro.loadbalancer.server.port=8050
+      - traefik.http.routers.hydro.middlewares=hydro-stripprefix
+      - traefik.http.middlewares.hydro-stripprefix.stripprefix.forceSlash=true
+      - traefik.http.middlewares.hydro-stripprefix.stripprefix.prefixes=/hydro
+    container_name: hydro
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - {{ network_name }}
+    working_dir: /home/jovyan/dashdir
+    command: gunicorn --workers=10 --threads=2 -b 0.0.0.0:8050 app:server
+    #command: python app.py
+
+
+  drawdown:
+    build:
+      context: hydro-drawdown
+      dockerfile: Dockerfile
+    image: phaustin/drawdown:nov23
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.drawdown.rule=Host(`{{ dashboard_domain }}`) && PathPrefix(`/drawdown`)
+      - traefik.http.routers.drawdown.tls=true
+      - traefik.http.routers.drawdown.tls.certresolver=lets-encrypt
+      - traefik.http.routers.drawdown.service=drawdown
+      - traefik.http.services.drawdown.loadbalancer.server.port=8050
+      - traefik.http.routers.drawdown.middlewares=drawdown-stripprefix
+      - traefik.http.middlewares.drawdown-stripprefix.stripprefix.forceSlash=true
+      - traefik.http.middlewares.drawdown-stripprefix.stripprefix.prefixes=/drawdown
+    container_name: drawdown
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - {{ network_name }}
+    working_dir: /home/jovyan/dashdir
+    command: gunicorn --workers=10 --threads=2 -b 0.0.0.0:8050 app:server
+
+  store:
+    build:
+      context: hydro-storativity
+      dockerfile: Dockerfile
+    image: phaustin/store:nov23
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.store.rule=Host(`{{ dashboard_domain }}`) && PathPrefix(`/store`)
+      - traefik.http.routers.store.tls=true
+      - traefik.http.routers.store.tls.certresolver=lets-encrypt
+      - traefik.http.routers.store.service=store
+      - traefik.http.services.store.loadbalancer.server.port=8050
+      - traefik.http.routers.store.middlewares=store-stripprefix
+      - traefik.http.middlewares.store-stripprefix.stripprefix.forceSlash=true
+      - traefik.http.middlewares.store-stripprefix.stripprefix.prefixes=/store
+    container_name: store
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - {{ network_name }}
+    working_dir: /home/jovyan/dashdir
+    command: gunicorn --workers=10 --threads=2 -b 0.0.0.0:8050 app:server
+
+  daisy:
+    build:
+      context: daisy-world
+      dockerfile: Dockerfile
+    image: phaustin/daisy:nov19
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.daisy.rule=Host(`{{ dashboard_domain }}`) && PathPrefix(`/daisy`)
+      - traefik.http.routers.daisy.tls=true
+      - traefik.http.routers.daisy.tls.certresolver=lets-encrypt
+      - traefik.http.routers.daisy.service=daisy
+      - traefik.http.services.daisy.loadbalancer.server.port=8050
+      - traefik.http.routers.daisy.middlewares=daisy-stripprefix
+      - traefik.http.middlewares.daisy-stripprefix.stripprefix.forceSlash=true
+      - traefik.http.middlewares.daisy-stripprefix.stripprefix.prefixes=/daisy
+    container_name: daisy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - {{ network_name }}
+    working_dir: /home/jovyan/dashdir
+    command: gunicorn --workers=10 --threads=2 -b 0.0.0.0:8050 app:server
+
+  ocgy:
+    build:
+      context: ocgy-dataviewer
+      dockerfile: Dockerfile
+    image: phaustin/ocgy:nov19
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.ocgy.rule=Host(`{{ dashboard_domain }}`) && PathPrefix(`/ocgy`)
+      - traefik.http.routers.ocgy.tls=true
+      - traefik.http.routers.ocgy.tls.certresolver=lets-encrypt
+      - traefik.http.routers.ocgy.service=ocgy
+      - traefik.http.services.ocgy.loadbalancer.server.port=8050
+      - traefik.http.routers.ocgy.middlewares=ocgy-stripprefix
+      - traefik.http.middlewares.ocgy-stripprefix.stripprefix.forceSlash=true
+      - traefik.http.middlewares.ocgy-stripprefix.stripprefix.prefixes=/ocgy
+    container_name: ocgy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - {{ network_name }}
+    working_dir: /home/jovyan/dashdir
+    command: gunicorn --workers=10 --threads=2 -b 0.0.0.0:8050 app:server
+
+  globaltemps:
+    build:
+      context: globaltemp-factors
+      dockerfile: Dockerfile
+    image: phaustin/globaltemps:nov19
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.globaltemps.rule=Host(`{{ dashboard_domain }}`) && PathPrefix(`/globaltemps`)
+      - traefik.http.routers.globaltemps.tls=true
+      - traefik.http.routers.globaltemps.tls.certresolver=lets-encrypt
+      - traefik.http.routers.globaltemps.service=globaltemps
+      - traefik.http.services.globaltemps.loadbalancer.server.port=8050
+      - traefik.http.routers.globaltemps.middlewares=globaltemps-stripprefix
+      - traefik.http.middlewares.globaltemps-stripprefix.stripprefix.forceSlash=true
+      - traefik.http.middlewares.globaltemps-stripprefix.stripprefix.prefixes=/globaltemps
+    container_name: globaltemps
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - {{ network_name }}
+    working_dir: /home/jovyan/dashdir
+    command: gunicorn --workers=10 --threads=2 -b 0.0.0.0:8050 app:server
+
+  co2mlo:
+    build:
+      context: co2-mlo-spo
+      dockerfile: Dockerfile
+    image: phaustin/co2mlo:jan28
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.co2mlo.rule=Host(`{{ dashboard_domain }}`) && PathPrefix(`/co2mlo`)
+      - traefik.http.routers.co2mlo.tls=true
+      - traefik.http.routers.co2mlo.tls.certresolver=lets-encrypt
+      - traefik.http.routers.co2mlo.service=co2mlo
+      - traefik.http.services.co2mlo.loadbalancer.server.port=8050
+      - traefik.http.routers.co2mlo.middlewares=co2mlo-stripprefix
+      - traefik.http.middlewares.co2mlo-stripprefix.stripprefix.forceSlash=true
+      - traefik.http.middlewares.co2mlo-stripprefix.stripprefix.prefixes=/co2mlo
+    container_name: co2mlo
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - {{ network_name }}
+    working_dir: /home/jovyan/dashdir
+    command: gunicorn --workers=10 --threads=2 -b 0.0.0.0:8050 app:server
+
+  timeseries:
+    build:
+      context: timeseries
+      dockerfile: Dockerfile
+    image: phaustin/timeseries:jan28
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.timeseries.rule=Host(`{{ dashboard_domain }}`) && PathPrefix(`/timeseries`)
+      - traefik.http.routers.timeseries.tls=true
+      - traefik.http.routers.timeseries.tls.certresolver=lets-encrypt
+      - traefik.http.routers.timeseries.service=timeseries
+      - traefik.http.services.timeseries.loadbalancer.server.port=8050
+      - traefik.http.routers.timeseries.middlewares=timeseries-stripprefix
+      - traefik.http.middlewares.timeseries-stripprefix.stripprefix.forceSlash=true
+      - traefik.http.middlewares.timeseries-stripprefix.stripprefix.prefixes=/timeseries
+    container_name: timeseries
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - {{ network_name }}
+    working_dir: /home/jovyan/dashdir
+    command: gunicorn --workers=10 --threads=2 -b 0.0.0.0:8050 app:server
+
+networks:
+  {{ network_name }}:
+    external: true

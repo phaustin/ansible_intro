@@ -3,11 +3,11 @@
   vars_files:
     - vars/default.yml
   tasks:
-    - name: move proxy templates to ~/repos/addon_containers
+    - name: write docker-compose.yml for dashboards
       template:
         src: '{{ item.src }}'
         dest: '{{ item.dest }}'
       loop:
-        "{{ traefik_template_list }}"
+        "{{ dashboard_template_list }}"
 
 

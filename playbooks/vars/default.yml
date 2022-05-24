@@ -1,46 +1,5 @@
 ---
 #
-# start_traefik.yml
-#
-DO_AUTH_TOKEN: !vault |
-  $ANSIBLE_VAULT;1.1;AES256
-  33323263383335373231653438666630326235386433373861663539373838623833393736643831
-  3931616339626631373461626639663235663764643064350a363934343163656530396539653330
-  61313639653061343532353334306363373861303632373266383834643639653630306531646338
-  6265613539623439610a333736316436383462393764386165376564363536656265656165643461
-  62316638643435643536386361393463636261353032303437363266326263383036666165316162
-  37363337633432643737306538353831666336376535653235633135356139323635363735653739
-  37346463336336353435613233393630326336633632663939373230666632653835646336313164
-  35613834363563346531
-#
-# setup_traefik.yml
-#
-#  - jinja2 template variables
-#
-root_domain: phaustin.org
-path_prefix_whoami1: try3
-path_prefix_whoami2: try4
-network_name: traefik_net
-user_and_pw: 'eoas:$2y$05$2N25nFVO13/Xxv4JUetyou5eo2xnrZ5rUHXJF0/P59gwZUGgZUdrC'
-#
-# - src and dest loop for template
-#
-template_list:
-  - { src: "files/docker-compose-proxy.j2" , dest: "~/repos/addon_containers/docker-compose-proxy.yml" }
-  - { src: "files/traefik.j2" , dest: "~/repos/addon_containers/traefik/config/traefik.yml" }
-  - { src: "files/middleware.j2" , dest: "~/repos/addon_containers/traefik/config/dynamic/middleware.yml" }
-  - { src: "files/routers.j2" , dest: "~/repos/addon_containers/traefik/config/dynamic/routers.yml" }
-#
-# setup_git.yml
-#
-gitcreds: |
-  export GH_SCOPED_CREDS_CLIENT_ID=Iv1.a7bfeeb8a061168a
-  export GH_SCOPED_CREDS_APP_URL=https://github.com/apps/tlef-auth
-git_username:
-  "Phil Austin"
-git_email:
-  "paustin@eoas.ubc.ca"
-#
 #  setup_jovyan.yml
 #
 new_user: 'jovyan'
@@ -54,3 +13,45 @@ docker_compose_version: "1.29.2"
 # setup_conda.yml
 #
 conda_prefix: ~/mini3_10
+#
+# setup_git.yml
+#
+gitcreds: |
+  export GH_SCOPED_CREDS_CLIENT_ID=Iv1.a7bfeeb8a061168a
+  export GH_SCOPED_CREDS_APP_URL=https://github.com/apps/tlef-auth
+git_username:
+  "Phil Austin"
+git_email:
+  "paustin@eoas.ubc.ca"
+github_repo:
+  "https://github.com/phaustin/addon_containers.git"
+git_remote_repos: "~/repos"
+git_remote_path: "{{ git_remote_repos }}/addon_containers"
+#
+# setup_traefik.yml
+#
+#  - jinja2 template variables
+#
+root_domain: phaustin.org
+dashboard_domain: dashboard.phaustin.org
+path_prefix_whoami1: try3
+path_prefix_whoami2: try4
+network_name: traefik_net
+user_and_pw: 'eoas:$2y$05$2N25nFVO13/Xxv4JUetyou5eo2xnrZ5rUHXJF0/P59gwZUGgZUdrC'
+#
+# - src and dest loop for template
+#
+traefik_template_list:
+  - { src: "files/docker-compose-proxy.j2" , dest: "{{ git_remote_path }}/docker-compose-proxy.yml" }
+  - { src: "files/traefik.j2" , dest: "{{ git_remote_path }}/traefik/config/traefik.yml" }
+  - { src: "files/middleware.j2" , dest: "{{ git_remote_path }}/traefik/config/dynamic/middleware.yml" }
+  - { src: "files/routers.j2" , dest: "{{ git_remote_path }}/traefik/config/dynamic/routers.yml" }
+
+dashboard_template_list:
+  - { src: "files/docker-compose.j2" , dest: "{{ git_remote_path }}/docker-compose.yml"}
+#
+# start_traefik.yml
+#
+DO_AUTH_TOKEN: "{{ vault_do_auth_token }}"
+
+
