@@ -1,11 +1,13 @@
 ---
 - hosts: all
+  vars_files:
+    - vars/default.yml
   tasks:
-    - name: start dashbords
+    - name: start dashboards
       shell: "docker-compose -f docker-compose.yml up -d"
       register: dashboard_status
       args:
-        chdir: ~/repos/addon_containers
+        chdir: "{{ git_remote_path }}/dashboards"
         executable: /bin/bash
 
 

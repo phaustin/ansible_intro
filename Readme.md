@@ -13,6 +13,8 @@ ansible-playbook -i hosts.yml -u jovyan -l do1x setup_traefik.yml
 
 ansible-playbook -i hosts.yml -u jovyan -l do1x  start_traefik.yml
 
+ansible-playbook -i hosts.yml -u jovyan -l do1x  setup_dashboards.yml
+
 ansible-playbook -i hosts.yml -u jovyan -l do1x  start_dashboards.yml
 
 
