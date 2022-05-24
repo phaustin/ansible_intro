@@ -1,7 +1,7 @@
 ---
 - hosts: all
-  vars:
-    conda_prefix: ~/mini3_10
+  vars_files:
+    - vars/default.yml
   pre_tasks:
     - name: Create a directory if it does not exist
       ansible.builtin.file:

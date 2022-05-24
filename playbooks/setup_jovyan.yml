@@ -7,9 +7,9 @@
 ---
 - hosts: all
   become: true
+  vars_files:
+    - vars/default.yml
   vars:
-    new_user: 'jovyan'
-    new_user_uid: '1003'
   tasks:
     - name: Install Prerequisites
       apt: name=aptitude update_cache=yes state=latest force_apt_get=yes
@@ -27,7 +27,19 @@
         - { name: 'sudo' }
       tags:
         - addgroup
+    - name: set gid for user group
+      group:
+        name: "{{ new_user }}"
+        gid: "{{ new_user_gid }}"
+        state: present
+      with_items:
+        - { name: 'docker'}
+        - { name: 'wheel' }
+        - { name: 'sudo' }
+      tags:
+        - addgroup
 
+        
     - name: Allow 'wheel' group to have passwordless sudo
       lineinfile:
         path: /etc/sudoers
@@ -44,6 +56,7 @@
         name: "{{ new_user }}"
         state: present
         groups: wheel,docker
+        group: "{{ new_user }}"
         append: true
         create_home: true
         uid: "{{ new_user_uid }}"
