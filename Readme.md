@@ -36,17 +36,15 @@ ansible-playbook -i hosts.yml -u jovyan -l do1x  setup_dashboards.yml
 
 ansible-playbook -i hosts.yml -u jovyan -l do1x  start_dashboards.yml
 
-R
-* tools
+## Tools
 
+### ansible adhoc command
 
-* ansible adhoc command
-
-ansible -i hosts.yml -u root do1x -m ping
-
+* ansible -i hosts.yml -u root do1x -m ping
 
 ansible-playbook -i hosts.yml -u jovyan -l do1x  test_ansible.yml
 
+### Encryption
 
 ansible-vault encrypt_string create  --output do_encrypt.txt --show-input --prompt --ask-vault-pass
 
