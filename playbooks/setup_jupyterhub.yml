@@ -1,0 +1,14 @@
+---
+- hosts: all
+  vars_files:
+    - vars/default.yml
+    - vars/jupyterhub.yml
+  tasks:
+    - name: write docker-compose.yml for jupyterhub
+      template:
+        src: '{{ item.src }}'
+        dest: '{{ item.dest }}'
+      loop:
+        "{{ dashboard_template_list }}"
+
+

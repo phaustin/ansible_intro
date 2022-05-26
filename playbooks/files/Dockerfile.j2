@@ -1,4 +1,4 @@
-FROM phaustin/base_image:dec11
+FROM "{{ base_image }}"
 
 USER ${NB_USER}
 
@@ -9,9 +9,9 @@ COPY jupyter_notebook_config.py /etc/jupyter/
 RUN echo "conda activate ${CONDA_ENV}" >> ${HOME}/.bashrc
 COPY jupyter_notebook_config.py /etc/jupyter/
 
-WORKDIR "${HOME}"
+WORKDIR "${HOME}/work"
 
-RUN touch version_9_20.txt
+RUN touch "{{ version_marker }}"
 
 CMD ["jupyterhub-singleuser"]
 
