@@ -2,21 +2,6 @@
 - hosts: all
   vars_files:
     - vars/default.yml
-  pre_tasks:
-    - name: Create a directory if it does not exist
-      ansible.builtin.file:
-        path: ~/bin
-        state: directory
-        mode: '0755'
-    - name: Adding the path in the bashrc files
-      #https://stackoverflow.com/questions/27733511/
-      #how-to-set-linux-environment-variables-with-ansible
-      lineinfile:
-        dest: ~/.bashrc
-        line: 'export PATH=$PATH:${HOME}/bin'
-        insertafter: 'EOF'
-        regexp: 'export PATH=\$PATH:${HOME}/bin'
-        state: present
  
   post_tasks:
     - name: conda init bashrc

@@ -4,7 +4,7 @@
 #
 new_user: 'jovyan'
 new_user_uid: '1003'
-new_user_gid: '1002'
+new_user_gid: '2000'
 #
 #  setup_docker.yml
 #
@@ -32,8 +32,8 @@ git_remote_path: "{{ git_remote_repos }}/ansible_intro"
 #
 #  - jinja2 template variables
 #
-root_domain: phaustin.org
-dashboard_domain: dashboard.phaustin.org
+root_domain: eoastest2.xyz
+dashboard_domain: dashboard.eoastest2.xyz
 path_prefix_whoami1: try3
 path_prefix_whoami2: try4
 network_name: traefik_net

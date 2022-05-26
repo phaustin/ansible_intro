@@ -23,7 +23,7 @@ This repository contains a set of ansible playbooks that builds a docker-powered
 * ansible-playbook  -i hosts.yml -u jovyan -l do1x [setup_conda.yml](playbooks/do1x setup_conda.yml)  
 * ansible-playbook -i hosts.yml -u jovyan -l do1x [setup_git.yml](playbooks/do1x setup_git.yml)  
 * ansible-playbook -i hosts.yml -u jovyan -l do1x [setup_traefik.yml](playbooks/setup_traefik.yml)  
-* ansible-playbook -i hosts.yml -u jovyan -l do1x  start_traefik.yml](playbooks/start_traefik.yml)  
+* ansible-playbook -i hosts.yml -u jovyan -l do1x  [start_traefik.yml](playbooks/start_traefik.yml)  
 * ansible-playbook -i hosts.yml -u jovyan -l do1x  [setup_dashboards.yml](playbooks/setup_dashboards.yml)  
 * ansible-playbook -i hosts.yml -u jovyan -l do1x  [start_dashboards.yml](playbooks/start_dashboards.yml)  
 

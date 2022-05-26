@@ -63,6 +63,24 @@
       tags:
         - adduser
 
+    - name: Create a ~/bin directory if it does not exist
+      ansible.builtin.file:
+        path: "~/{{ new_user }}/bin"
+        owner: "{{ new_user }}"
+        state: directory
+        mode: '0755'
+
+    - name: Adding ~/bin to the path
+      #https://stackoverflow.com/questions/27733511/
+      #how-to-set-linux-environment-variables-with-ansible
+      lineinfile:
+        owner: "{{ new_user }}"
+        dest: "~{{ new_user }}/.bashrc"
+        line: 'export PATH=$PATH:${HOME}/bin'
+        insertafter: 'EOF'
+        regexp: 'export PATH=\$PATH:${HOME}/bin'
+        state: present
+
     - name: Set authorized keys for remote user
       vars:
         key_path:
