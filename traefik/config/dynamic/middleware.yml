@@ -20,5 +20,5 @@ http:
     dashboardAuth:
       basicAuth:
         users:
-          - {{ user__and_pw }} 
+          - "{{ user_and_pw }}"
 # see https://community.traefik.io/t/middleware-to-add-the-if-needed/1895/19
