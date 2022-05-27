@@ -3,10 +3,10 @@
 #  setup_jupyterhub.yml
 #
 jupyterhub_template_list:
-  - { src: "files/docker-compose-proxy.j2" , dest: "{{ git_remote_path }}/docker-compose-proxy.yml" }
-  - { src: "files/traefik.j2" , dest: "{{ git_remote_path }}/traefik/config/traefik.yml" }
-  - { src: "files/middleware.j2" , dest: "{{ git_remote_path }}/traefik/config/dynamic/middleware.yml" }
-  - { src: "files/routers.j2" , dest: "{{ git_remote_path }}/traefik/config/dynamic/routers.yml" }
+  - { src: "files/docker-compose-juypterhub.j2"  , dest: "{{ git_remote_path }}/jupyterhub/docker-compose.yml" }
+  - { src: "files/Dockerfile_hub.j2" , dest: "{{ git_remote_path }}/jupyterhub/hub_image/Dockerfile" }
+  - { src: "files/Dockerfile_notebook.j2" , dest: "{{ git_remote_path }}/jupyterhub/e211book_image/Dockerfile" }
+  - { src: "files/Dockerfile_base.j2" , dest: "{{ git_remote_path }}/jupyterhub/base_image/Dockerfile" }
 
 
 

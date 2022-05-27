@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+
+  base_image:
+    image: phaustin/base_addon:may26
+    build:
+      context: base_image
+    container_name: base_addon_may26
+    labels:
+      - "traefik.enable=false"
+
+  e211book:
+    image: phaustin/e211book:may25
+    build:
+      context: e211book_image
+    container_name: e211book_may26
+    depends_on: [base_image]
+    labels:
+      - "traefik.enable=false"
+
+  e211hub:
+    build: hub_image
+    image: phaustin/e211hub_img:may26
+    container_name: e211hub
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jhub.rule=Host(`{{ root_domain }}`)"
+      - traefik.http.routers.jhub.tls=true
+      - traefik.http.routers.jhub.tls.certresolver=lets-encrypt
+      - "traefik.http.routers.jhub.service=e211hub"
+      - "traefik.http.services.e211hub.loadbalancer.server.port=8000"
+      - "traefik.http.routers.jhub.middlewares=e211Auth@file"
+    restart: on-failure
+    networks:
+      - {{ network_name }}
+
+
+networks:
+  {{ network_name }}:
+    external: true
