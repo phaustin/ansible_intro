@@ -1,70 +1,42 @@
-version: '3'
+version: '3.7'
 
 services:
-  
-  e211book:
-    image: phaustin/e211book:sep20
-    build:
-      context: e211book_image
-    container_name: e211book_sep20
-    depends_on: [base_image]
-    labels:
-      - "traefik.enable=false"
 
-  micro:
-    image: phaustin/micro:dec11
-    build:
-      context: micro_image
-    container_name: micro_dec11
-    labels:
-      - "traefik.enable=false"
-
-
-  climbook:
-    image: phaustin/climbook:dec13
-    build:
-      context: climate_image
-    container_name: clim_dec13
-    depends_on: [base_image]
-    labels:
-      - "traefik.enable=false"
-
-  base_image:
-    image: phaustin/base_image:dec11
+  base:
+    image: phaustin/base:may27
     build:
       context: base_image
-    container_name: baseimage_dec11
+    container_name: base_may27
     labels:
       - "traefik.enable=false"
 
-  test_image:
-    image: phaustin/test_image:dec11
+  e211book:
+    image: phaustin/e211book:may27
     build:
-      context: test_image
-    container_name: testimage_dec11
+      context: e211book_image
+    container_name: e211book_may27
+    depends_on: [base]
     labels:
       - "traefik.enable=false"
 
-      
   e211hub:
-    build: hub_image
-    image: phaustin/e211hub_img:mar11
-    container_name: e211hub
+    build: e211hub_image
+    image: phaustin/e211hub:may27
+    container_name: e211hub_may27
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jhub.rule=Host(`jupyter.eoastest.xyz`)"
+      - "traefik.http.routers.jhub.rule=Host(`jupyter.eoastest2.xyz`)"
       - traefik.http.routers.jhub.tls=true
       - traefik.http.routers.jhub.tls.certresolver=lets-encrypt
       - "traefik.http.routers.jhub.service=e211hub"
       - "traefik.http.services.e211hub.loadbalancer.server.port=8000"
-      - "traefik.http.routers.jhub.middlewares=a448Auth@file"
     restart: on-failure
     networks:
-      - proxy_aug07
+      - traefik_net
+
 
 networks:
-    proxy_aug07:
-      external: true
-
+  traefik_net:
+    external: true

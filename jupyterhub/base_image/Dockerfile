@@ -8,9 +8,9 @@ LABEL org.opencontainers.image.source=https://github.com/pangeo-data/pangeo-dock
 # ========================
 ENV CONDA_VERSION=4.10.3-2 \
     CONDA_ENV=notebook \
-    NB_USER=jovyan \
-    NB_UID=1002 \
-    NB_GID=1004 \
+    NB_USER=jovyan\
+    NB_UID=1003 \
+    NB_GID=2000 \
     SHELL=/bin/bash \
     LANG=C.UTF-8  \
     LC_ALL=C.UTF-8 \
