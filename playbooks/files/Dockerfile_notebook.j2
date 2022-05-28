@@ -1,4 +1,4 @@
-FROM "{{ base_image }}"
+FROM "{{ ocese_base_image }}"
 
 USER ${NB_USER}
 
@@ -11,7 +11,7 @@ COPY jupyter_notebook_config.py /etc/jupyter/
 
 WORKDIR "${HOME}/work"
 
-RUN touch "{{ version_marker }}"
+RUN touch "{{ notebook_version_marker }}"
 
 CMD ["jupyterhub-singleuser"]
 

@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   base_image:
-    image: phaustin/base_addon:may26
+    image: {{ ocese_base_image }}
     build:
       context: base_image
     container_name: base_addon_may26
@@ -27,12 +27,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jhub.rule=Host(`{{ root_domain }}`)"
+      - "traefik.http.routers.jhub.rule=Host(`{{ hub_domain }}`)"
       - traefik.http.routers.jhub.tls=true
       - traefik.http.routers.jhub.tls.certresolver=lets-encrypt
       - "traefik.http.routers.jhub.service=e211hub"
       - "traefik.http.services.e211hub.loadbalancer.server.port=8000"
-      - "traefik.http.routers.jhub.middlewares=e211Auth@file"
     restart: on-failure
     networks:
       - {{ network_name }}

@@ -21,4 +21,7 @@ http:
       basicAuth:
         users:
           - "{{ user_and_pw }}"
+      e211Auth:
+        users:
+          - "{{ user_and_pw }}"
 # see https://community.traefik.io/t/middleware-to-add-the-if-needed/1895/19
