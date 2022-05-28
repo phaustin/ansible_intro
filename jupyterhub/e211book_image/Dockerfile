@@ -4,6 +4,10 @@ USER ${NB_USER}
 
 RUN mkdir -p ${HOME}/work
 
+RUN mkdir -p ${HOME}/work/data_share
+
+RUN chown -R {NB_USER} ${HOME}/work
+
 COPY jupyter_notebook_config.py /etc/jupyter/
 
 WORKDIR "${HOME}/work"

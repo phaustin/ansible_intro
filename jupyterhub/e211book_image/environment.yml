@@ -14,6 +14,7 @@ dependencies:
   - conda-lock
   - jupyterlab
   - jupyterhub=2.3
+  - nbgitpuller
   - mamba
   - scipy
   - matplotlib
