@@ -8,9 +8,9 @@ LABEL org.opencontainers.image.source=https://github.com/pangeo-data/pangeo-dock
 # ========================
 ENV CONDA_VERSION=4.10.3-2 \
     CONDA_ENV=notebook \
-    NB_USER=jovyan \
-    NB_UID=1002 \
-    NB_GID=1004 \
+    NB_USER={{ new_user }}\
+    NB_UID={{ new_user_uid }} \
+    NB_GID={{ new_user_gid }} \
     SHELL=/bin/bash \
     LANG=C.UTF-8  \
     LC_ALL=C.UTF-8 \
@@ -40,13 +40,13 @@ RUN echo "Installing Apt-get packages..." \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --chown=jovyan:jovyan . /srv
+COPY --chown={{ new_user }}:{{ new_group }} . /srv
 
 RUN echo "add conda environment to /etc/profile.d" \
     && cat /srv/bashrc_conda.txt >> /etc/profile.d/init_conda.sh
 
-RUN echo "add conda environment to /home/jovyan/.bashrc" \
-    && cat /srv/bashrc_conda.txt >> /home/jovyan/.bashrc
+RUN echo "add conda environment to /home/{{ new_user }}/.bashrc" \
+    && cat /srv/bashrc_conda.txt >> /home/{{ new_user }}/.bashrc
 
 
 # ========================
@@ -76,7 +76,7 @@ ENTRYPOINT ["/srv/start"]
 ONBUILD USER root
 # FIXME (?): user and home folder is hardcoded for now
 # FIXME (?): this line breaks the cache of all steps below
-ONBUILD COPY --chown=jovyan:jovyan . /home/jovyan
+ONBUILD COPY --chown={{ new_user }}:{{ new_user }} . /home/{{ new_user }}
 
 ONBUILD RUN echo "Checking for 'binder' or '.binder' subfolder" \
         ; if [ -d binder ] ; then \

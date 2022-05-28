@@ -1,4 +1,4 @@
-FROM "{{ ocese_base_image }}"
+FROM {{ dockerhub_id }}/{{ hub_service_name }}:{{ container_version }}
 
 USER ${NB_USER}
 
@@ -11,7 +11,8 @@ COPY jupyter_notebook_config.py /etc/jupyter/
 
 WORKDIR "${HOME}/work"
 
-RUN touch "{{ notebook_version_marker }}"
+RUN touch "/home/jovyan/container_version_{{ container_version }}.txt"
+
 
 CMD ["jupyterhub-singleuser"]
 

@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+
+  base_image:
+    image: {{ dockerhub_id }}/base:{{ container_version }}
+    build:
+      context: base_image
+    container_name: base_{{ container_version }}
+    labels:
+      - "traefik.enable=false"
+
+  {{ notebook_service_name }}:
+    image: {{ dockerhub_id }}/{{ notebook_service_name }}:{{ container_version }}
+    build:
+      context: {{ notebook_service_name }}_image
+    container_name: {{ notebook_service_name }}_{{ container_version }}
+    depends_on: [base_image]
+    labels:
+      - "traefik.enable=false"
+
+  {{ hub_service_name }}:
+    build: {{ hub_service_name }}_image
+    image: {{ dockerhub_id }}/{{ hub_service_name }}:{{ container_version }}
+    container_name: {{ hub_service_name }}_{{ container_version }}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jhub.rule=Host(`{{ hub_domain }}`)"
+      - traefik.http.routers.jhub.tls=true
+      - traefik.http.routers.jhub.tls.certresolver=lets-encrypt
+      - "traefik.http.routers.jhub.service={{ hub_service_name }}"
+      - "traefik.http.services.{{ hub_service_name }}.loadbalancer.server.port=8000"
+    restart: on-failure
+    networks:
+      - {{ network_name }}
+
+
+networks:
+  {{ network_name }}:
+    external: true

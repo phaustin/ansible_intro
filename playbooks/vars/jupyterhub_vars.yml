@@ -2,14 +2,15 @@
 #
 #  setup_jupyterhub.yml
 #
-hub_version_marker: "may27_pip.txt"
+container_version: may27
+dockerhub_id: phaustin
+hub_service_name: e211hub
+notebook_service_name: e211book
 hub_domain: "jupyter.eoastest2.xyz"
-notebook_version_marker: "may27_pip.txt"
-ocese_base_image: "phaustin/base_addon:may26"
 jupyterhub_template_list:
-  - { src: "files/docker-compose-juypterhub.j2"  , dest: "{{ git_remote_path }}/jupyterhub/docker-compose-jupyterhub.yml" }
+  - { src: "files/docker-compose-jupyterhub.j2"  , dest: "{{ git_remote_path }}/jupyterhub/docker-compose-jupyterhub.yml" }
   - { src: "files/Dockerfile_hub.j2" , dest: "{{ git_remote_path }}/jupyterhub/hub_image/Dockerfile" }
-  - { src: "files/Dockerfile_notebook.j2" , dest: "{{ git_remote_path }}/jupyterhub/e211book_image/Dockerfile" }
+  - { src: "files/Dockerfile_notebook.j2" , dest: "{{ git_remote_path }}/jupyterhub/{{ notebook_service_name }}_image/Dockerfile" }
   - { src: "files/Dockerfile_base.j2" , dest: "{{ git_remote_path }}/jupyterhub/base_image/Dockerfile" }
   - { src: "files/jupyterhub_config.j2" , dest: "{{ git_remote_path }}/jupyterhub/hub_image/jupyterhub_config.py" }
 

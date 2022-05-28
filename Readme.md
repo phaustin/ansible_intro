@@ -11,7 +11,7 @@ This repository contains a set of ansible playbooks that builds a docker-powered
 ## File edits
 
 * replace `ansible_host`, `ansible_ssh_private_key_file` with your node ip address and private key files in [playbooks/hosts.yml](playbooks/hosts.yml)  
-* replace values for `root_domain`, `github_repo` etc in  in [playbooks/vars/default.yml](playbooks/vars/default.yml)  
+* replace values for `root_domain`, `github_repo` etc in  in [playbooks/vars/jovyan_vars.yml](playbooks/vars/jovyan_vars.yml)  
 * Encrypt your Digital Ocean api token in a file that saves it as a variable named `vault_do_auth_token` and copy the file to [playbooks/vars/vault.yml](playbooks/vars/vault.yml)
 
 

@@ -1,8 +1,8 @@
 ---
 - hosts: all
   vars_files:
-    - vars/default.yml
-    - vars/jupyterhub.yml
+    - vars/jovyan_vars.yml
+    - vars/jupyterhub_vars.yml
   tasks:
     - name: write docker-compose.yml for jupyterhub
       template:

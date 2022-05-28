@@ -3,6 +3,7 @@
 #  setup_jovyan.yml
 #
 new_user: 'jovyan'
+new_group: 'jovyan'
 new_user_uid: '1003'
 new_user_gid: '2000'
 #
