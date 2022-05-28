@@ -1,0 +1,9 @@
+---
+#
+#  setup_jupyterhub.yml
+#
+dashboard_domain: dashboard.eoastest2.xyz
+dashboard_template_list:
+  - { src: "files/dashboards/docker-compose-dashboards.j2" , dest: "{{ git_remote_path }}/dashboards/docker-compose-dashboards.yml"}
+  - { src: "files/dashboards/Dockerfile_co2-mlo-spo.j2" , dest: "{{ git_remote_path }}/dashboards/co2-mlo-spo/Dockerfile"}
+

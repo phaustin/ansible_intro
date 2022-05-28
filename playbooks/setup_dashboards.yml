@@ -1,7 +1,9 @@
 ---
 - hosts: all
   vars_files:
-    - vars/dashbord_vars.yml
+    - vars/dashboard_vars.yml
+    - vars/jupyterhub_vars.yml
+    - vars/traefik_vars.yml
     - vars/jovyan_vars.yml
   tasks:
     - name: write docker-compose.yml for dashboards
