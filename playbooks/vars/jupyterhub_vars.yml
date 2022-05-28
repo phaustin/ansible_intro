@@ -5,6 +5,7 @@
 container_version: may27
 dockerhub_id: phaustin
 hub_service_name: e211hub
+base_notebook_service_name: base
 notebook_service_name: e211book
 hub_domain: "jupyter.eoastest2.xyz"
 jupyterhub_template_list:

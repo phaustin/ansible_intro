@@ -1,4 +1,4 @@
-FROM {{ dockerhub_id }}/{{ hub_service_name }}:{{ container_version }}
+FROM {{ dockerhub_id }}/{{ base_notebook_service_name }}:{{ container_version }}
 
 USER ${NB_USER}
 

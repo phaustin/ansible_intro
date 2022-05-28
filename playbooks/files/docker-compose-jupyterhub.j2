@@ -2,11 +2,11 @@ version: '3.7'
 
 services:
 
-  base_image:
+  {{ base_notebook_service_name }}:
     image: {{ dockerhub_id }}/base:{{ container_version }}
     build:
-      context: base_image
-    container_name: base_{{ container_version }}
+      context: {{base_notebook_service_name }}_image
+    container_name: {{ base_notebook_service_name }}_{{ container_version }}
     labels:
       - "traefik.enable=false"
 
