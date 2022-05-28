@@ -9,11 +9,11 @@ base_notebook_service_name: base
 notebook_service_name: e211book
 hub_domain: "jupyter.eoastest2.xyz"
 jupyterhub_template_list:
-  - { src: "files/docker-compose-jupyterhub.j2"  , dest: "{{ git_remote_path }}/jupyterhub/docker-compose-jupyterhub.yml" }
-  - { src: "files/Dockerfile_hub.j2" , dest: "{{ git_remote_path }}/jupyterhub/{{ hub_service_name }}_image/Dockerfile" }
-  - { src: "files/Dockerfile_notebook.j2" , dest: "{{ git_remote_path }}/jupyterhub/{{ notebook_service_name }}_image/Dockerfile" }
-  - { src: "files/Dockerfile_base.j2" , dest: "{{ git_remote_path }}/jupyterhub/{{ base_notebook_service_name }}_image/Dockerfile" }
-  - { src: "files/jupyterhub_config.j2" , dest: "{{ git_remote_path }}/jupyterhub/{{ hub_service_name }}_image/jupyterhub_config.py" }
+  - { src: "files/jupyterhub/docker-compose-jupyterhub.j2"  , dest: "{{ git_remote_path }}/jupyterhub/docker-compose-jupyterhub.yml" }
+  - { src: "files/jupyterhub/Dockerfile_hub.j2" , dest: "{{ git_remote_path }}/jupyterhub/{{ hub_service_name }}_image/Dockerfile" }
+  - { src: "files/jupyterhub/Dockerfile_notebook.j2" , dest: "{{ git_remote_path }}/jupyterhub/{{ notebook_service_name }}_image/Dockerfile" }
+  - { src: "files/jupyterhub/Dockerfile_base.j2" , dest: "{{ git_remote_path }}/jupyterhub/{{ base_notebook_service_name }}_image/Dockerfile" }
+  - { src: "files/jupyterhub/jupyterhub_config.j2" , dest: "{{ git_remote_path }}/jupyterhub/{{ hub_service_name }}_image/jupyterhub_config.py" }
 
 
 
