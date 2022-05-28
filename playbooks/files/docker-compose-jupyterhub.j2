@@ -15,7 +15,7 @@ services:
     build:
       context: {{ notebook_service_name }}_image
     container_name: {{ notebook_service_name }}_{{ container_version }}
-    depends_on: [base_image]
+    depends_on: [{{ base_notebook_service_name }}]
     labels:
       - "traefik.enable=false"
 
