@@ -4,7 +4,7 @@
     - vars/jovyan_vars.yml
   tasks:
     - name: start dashboards
-      shell: "docker-compose -f docker-compose.yml up -d"
+      shell: "docker-compose -f docker-compose-jupyterhub.yml up -d"
       register: dashboard_status
       args:
         chdir: "{{ git_remote_path }}/dashboards"
