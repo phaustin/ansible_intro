@@ -1,4 +1,4 @@
-FROM phaustin/base_image:aug07
+FROM phaustin/base:may27
 
 USER ${NB_USER}
 
