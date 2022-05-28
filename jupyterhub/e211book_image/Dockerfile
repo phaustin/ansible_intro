@@ -2,8 +2,6 @@ FROM phaustin/base:may27
 
 USER ${NB_USER}
 
-RUN mkdir -p ${HOME}/work
-
 RUN mkdir -p ${HOME}/work/data_share
 
 COPY jupyter_notebook_config.py /etc/jupyter/
