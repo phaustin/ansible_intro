@@ -1,5 +1,11 @@
+from oauthenticator.github import GitHubOAuthenticator
+from pathlib import Path
+
 # dummy for testing. Don't use this in production!
-c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
+# c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
+from oauthenticator.github import GitHubOAuthenticator
+c.JupyterHub.authenticator_class = GitHubOAuthenticator
+
 # launch with docker
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 c.Authenticator.admin_users = {'phaustin'}
@@ -24,4 +30,20 @@ c.DockerSpawner.volumes = {"jupyterhub-user-{username}": notebook_dir,
 
 # delete containers when the stop
 c.DockerSpawner.remove = True
+
+c.Authenticator.allowed_users = allowed = set()
+c.Authenticator.admin_users = admin = set()
+
+curr_dir = Path()
+user_list = curr_dir / 'user_list.txt'
+
+with open(user_list,'r') as f:
+   all_lines=f.readlines()
+   for the_line in all_lines:
+      parts=the_line.split(';')
+      username=parts[0].strip()
+      allowed.add(username)
+      if len(parts) > 1 and parts[1] == 'admin':
+         admin.add(username)
+   
 
