@@ -1,0 +1,25 @@
+---
+- hosts: all
+  vars_files:
+    - vars/jovyan_vars.yml
+    - vars/traefik_vars.yml
+    - vars/vault.yml
+  tasks:
+    - name: start traefik
+      shell: "docker-compose -f docker-compose-google-proxy.yml up -d"
+      environment:
+        DO_AUTH_TOKEN: "{{ DO_AUTH_TOKEN }}"
+        GOOGLE_OAUTH_CLIENT_ID: "{{ vault_google_oauth_client_id }}"
+        GOOGLE_OAUTH_CLIENT_SECRET: "{{ vault_google_oauth_client_secret }}"
+        GOOGLE_RANDOM_SECRET: "{{ vault_google_cookie_secret }}"
+        GOOGLE_WHITELIST: "{{ vault_google_whitelist }}"
+      register: envvar_test
+      args:
+        chdir: "{{ git_remote_path }}"
+        executable: /bin/bash
+
+    # - name: print envvar result
+    #   debug:
+    #     msg: "stdout: {{ envvar_test.stdout }}"
+
+

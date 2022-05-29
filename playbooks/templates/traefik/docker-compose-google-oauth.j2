@@ -1,0 +1,55 @@
+version: '3'
+# https://github.com/thomseddon/traefik-forward-auth/blob/master/examples/traefik-v2/swarm/docker-compose-auth-host.yml
+services:
+  traefik_google:
+    environment:
+      - DO_AUTH_TOKEN
+    image: "traefik:v2.5"
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - {{ network_name }}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}/traefik/config:/etc/traefik
+    container_name: traefik_google
+    restart: always
+
+  whoami3:
+    image: containous/whoami
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami3.rule=Host(`web.{{ root_domain }}`)
+      - traefik.http.routers.whoami3.tls=true
+      - traefik.http.routers.whoami3.tls.certresolver=lets-encrypt
+      - traefik.http.routers.whoami3.service=whoami3
+      - traefik.http.services.whoami3.loadbalancer.server.port=80
+    container_name: whoami3
+
+  traefik-forward-auth:
+    image: thomseddon/traefik-forward-auth:2
+    environment:
+      #encrypted in vault.yml
+      # and set in start_traefik_google_oauth.yml
+      - PROVIDERS_GOOGLE_CLIENT_ID
+      - PROVIDERS_GOOGLE_CLIENT_SECRET
+      - SECRET
+      - WHITELIST
+      # INSECURE_COOKIE is required if not using a https entrypoint
+      - INSECURE_COOKIE=false
+      - COOKIE_DOMAIN={{ root_domain }}
+      - AUTH_HOST=auth.{{ root_domain }}:80
+      - LOG_LEVEL=debug
+    labels:
+      - "traefik.http.routers.traefik-forward-auth.rule=Host(`auth.{{ root_domain }}')"
+      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.address=http://traefik-forward-auth:4181"
+      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User"
+      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.trustForwardHeader=true"
+      - "traefik.http.services.traefik-forward-auth.loadbalancer.server.port=4181"
+
+networks:
+    {{ network_name }}:
+      driver: bridge
+      name: {{ network_name }}
+

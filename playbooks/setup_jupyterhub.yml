@@ -11,10 +11,14 @@
         dest: '{{ item.dest }}'
       loop:
         "{{ jupyterhub_template_list }}"
-
-    - name: copy user_list.txt
+    #https://ahelpme.com/software/ansible/ansible-using-ansible-vault-with-copy-module-to-decrypt-on-the-fly-files/
+    - name: decrypt and copy user_list.txt
       copy:
-        src: 'files/jupyterhub/user_list.txt'
+        src: 'files/jupyterhub/vault_user_list.txt'
         dest: '{{ git_remote_path }}/jupyterhub/{{ hub_service_name }}_image/user_list.txt'
+        decrypt: yes
+        backup: no
+        
+
 
 
