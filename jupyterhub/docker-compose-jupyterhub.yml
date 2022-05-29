@@ -25,6 +25,10 @@ services:
     container_name: e211hub_may27
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - OAUTH_CALLBACK_URL
+      - OAUTH_CLIENT_ID
+      - OAUTH_CLIENT_SECRET
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.jhub.rule=Host(`jupyter.eoastest2.xyz`)"

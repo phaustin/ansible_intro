@@ -1,5 +1,6 @@
 from oauthenticator.github import GitHubOAuthenticator
 from pathlib import Path
+import os
 
 # dummy for testing. Don't use this in production!
 # c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
@@ -8,7 +9,6 @@ c.JupyterHub.authenticator_class = GitHubOAuthenticator
 
 # launch with docker
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
-c.Authenticator.admin_users = {'phaustin'}
 # we need the hub to listen on all ips when it is in a container
 c.JupyterHub.hub_ip = '0.0.0.0'
 # the hostname/ip that should be used to connect to the hub
@@ -31,11 +31,16 @@ c.DockerSpawner.volumes = {"jupyterhub-user-{username}": notebook_dir,
 # delete containers when the stop
 c.DockerSpawner.remove = True
 
+c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
+c.GitHubOAuthenticator.client_id = os.environ['OAUTH_CLIENT_ID']
+c.GitHubOAuthenticator.client_secret = os.environ['OAUTH_CLIENT_SECRET']
 c.Authenticator.allowed_users = allowed = set()
 c.Authenticator.admin_users = admin = set()
 
 curr_dir = Path()
 user_list = curr_dir / 'user_list.txt'
+
+
 
 with open(user_list,'r') as f:
    all_lines=f.readlines()
@@ -43,7 +48,17 @@ with open(user_list,'r') as f:
       parts=the_line.split(';')
       username=parts[0].strip()
       allowed.add(username)
-      if len(parts) > 1 and parts[1] == 'admin':
-         admin.add(username)
+      if len(parts) > 1:
+         part2 = parts[1].strip()
+         if part2 == 'admin':
+            admin.add(username)
+         
+with open(curr_dir / 'dump.txt','w') as out:
+   out.write("hello\n\n")
+   out.write(f"{all_lines}\n\n")
+   out.write(f"admin: {admin}\n\n")
+   out.write(f"allowed: {allowed}\n\n")
+
+
    
 
