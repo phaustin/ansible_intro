@@ -1,8 +1,9 @@
 ---
 - hosts: all
   vars_files:
-    - vars/jovyen_vars.yml
+    - vars/jovyan_vars.yml
     - vars/jupyterhub_vars.yml
+    - vars/vault.yml
   tasks:
     - name: start jupyterhub
       shell: "docker-compose -f docker-compose-jupyterhub.yml up -d"
