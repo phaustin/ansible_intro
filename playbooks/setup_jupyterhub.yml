@@ -5,11 +5,16 @@
     - vars/traefik_vars.yml
     - vars/jupyterhub_vars.yml
   tasks:
-    - name: write docker-compose.yml for jupyterhub
+    - name: fill and copy templates for jupyterhub
       template:
         src: '{{ item.src }}'
         dest: '{{ item.dest }}'
       loop:
         "{{ jupyterhub_template_list }}"
+
+    - name: copy user_list.txt
+      copy:
+        src: 'files/jupyterhub/user_list.txt'
+        dest: '{{ git_remote_path }}/jupyterhub/{{ hub_service_name }}_image/user_list.txt'
 
 

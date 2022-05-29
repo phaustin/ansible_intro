@@ -15,5 +15,7 @@ jupyterhub_template_list:
   - { src: "files/jupyterhub/Dockerfile_base.j2" , dest: "{{ git_remote_path }}/jupyterhub/{{ base_notebook_service_name }}_image/Dockerfile" }
   - { src: "files/jupyterhub/jupyterhub_config.j2" , dest: "{{ git_remote_path }}/jupyterhub/{{ hub_service_name }}_image/jupyterhub_config.py" }
 
-
+GITHUB_CLIENT_ID: "{{ vault_github_oauth_client_id }}"
+GITHUB_CLIENT_SECRET: "{{ vault_github_oauth_client_secret }}"
+OAUTH_CALLBACK_URL: "https://{{ hub_domain }}/hub/oauth_callback"
 
