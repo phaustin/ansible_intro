@@ -5,6 +5,8 @@
 #  - jinja2 template variables
 #
 root_domain: eoastest2.xyz
+web_domain: web.{{ root_domain }}
+auth_domain: auth.{{ auth_domain }}
 path_prefix_whoami1: try1
 path_prefix_whoami2: try2
 path_prefix_whoami3: try3
@@ -20,18 +22,6 @@ traefik_template_list:
   - { src: "templates/traefik/routers.j2" , dest: "{{ git_remote_path }}/traefik/config/dynamic/routers.yml" }
   - { src: "templates/traefik/docker-compose-google-oauth.j2" , dest: "{{ git_remote_path }}/docker-compose-google-proxy.yml" }
 
-#
-# start_traefik.yml
-#
-DO_AUTH_TOKEN: "{{ vault_do_auth_token }}"
-#
-# using google oauth
-#
-GΟΟGLE_OAUTH_CLIENT_ID: "{{ vault_do_auth_token }}"
-GOOGLE_OAUTH_CLIENT_SECRET: "{{ vault_do_auth_token }}"
-GOOGLE_RANDOM_SECRET: "{{ vault_do_auth_token }}"
-GOOGLE_WHITELIST: "{{ vault_google_whitelist }}"
-GOOGLE_COOKIE_SECRET: "{{ vault_google_cookie_secret }}"
 
 
 

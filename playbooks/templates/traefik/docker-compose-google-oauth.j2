@@ -1,7 +1,7 @@
-version: '3'
-# https://github.com/thomseddon/traefik-forward-auth/blob/master/examples/traefik-v2/swarm/docker-compose-auth-host.yml
+version: '3.7'
+
 services:
-  traefik_google:
+  traefik:
     environment:
       - DO_AUTH_TOKEN
     image: "traefik:v2.5"
@@ -9,47 +9,48 @@ services:
       - 80:80
       - 443:443
     networks:
-      - {{ network_name }}
+      - traefik_net
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PWD}/traefik/config:/etc/traefik
-    container_name: traefik_google
+    container_name: traefik
     restart: always
 
-  whoami3:
-    image: containous/whoami
+  whoami:
+    image: "containous/whoami"    
+    networks:
+      - traefik_net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - traefik.enable=true
-      - traefik.http.routers.whoami3.rule=Host(`web.{{ root_domain }}`)
-      - traefik.http.routers.whoami3.tls=true
-      - traefik.http.routers.whoami3.tls.certresolver=lets-encrypt
-      - traefik.http.routers.whoami3.service=whoami3
-      - traefik.http.services.whoami3.loadbalancer.server.port=80
-    container_name: whoami3
+      - traefik.http.routers.whoami.rule=Host(`{{ web_domain }}`)
+      - traefik.http.routers.whoami.tls=true
+      - traefik.http.routers.whoami.tls.certresolver=lets-encrypt
+      - traefik.http.routers.whoami.service=whoami
+      - traefik.http.services.whoami.loadbalancer.server.port=80
+      - "traefik.http.routers.whoami.middlewares=traefik-forward-auth"
+    container_name: whoami
 
   traefik-forward-auth:
     image: thomseddon/traefik-forward-auth:2
     environment:
-      #encrypted in vault.yml
-      # and set in start_traefik_google_oauth.yml
       - PROVIDERS_GOOGLE_CLIENT_ID
       - PROVIDERS_GOOGLE_CLIENT_SECRET
-      - SECRET
       - WHITELIST
-      # INSECURE_COOKIE is required if not using a https entrypoint
-      - INSECURE_COOKIE=false
-      - COOKIE_DOMAIN={{ root_domain }}
-      - AUTH_HOST=auth.{{ root_domain }}:80
-      - LOG_LEVEL=debug
+      - SECRET
+      - INSECURE_COOKIE=false # Example assumes no https, do not use in production
     labels:
-      - "traefik.http.routers.traefik-forward-auth.rule=Host(`auth.{{ root_domain }}')"
       - "traefik.http.middlewares.traefik-forward-auth.forwardauth.address=http://traefik-forward-auth:4181"
       - "traefik.http.middlewares.traefik-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User"
-      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.trustForwardHeader=true"
       - "traefik.http.services.traefik-forward-auth.loadbalancer.server.port=4181"
+      - traefik.enable=true
+    networks:
+      - traefik_net
+  
 
 networks:
-    {{ network_name }}:
+    traefik_net:
       driver: bridge
-      name: {{ network_name }}
+      name: traefik_net
 
