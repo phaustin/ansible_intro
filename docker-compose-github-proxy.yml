@@ -38,18 +38,14 @@ services:
     image: phaustin/traefik-forward-pha:test
     environment:
       - DEFAULT_PROVIDER=generic-oauth
-      # - PROVIDERS_GOOGLE_CLIENT_ID
-      # - PROVIDERS_GOOGLE_CLIENT_SECRET
-      # - DO_AUTH_TOKEN
       - INSECURE_COOKIE=false # Example assumes no https, do not use in production
       - PROVIDERS_GENERIC_OAUTH_AUTH_URL=https://github.com/login/oauth/authorize
       - PROVIDERS_GENERIC_OAUTH_TOKEN_URL=https://github.com/login/oauth/access_token
       - PROVIDERS_GENERIC_OAUTH_USER_URL=https://api.github.com/user
-      - PROVIDERS_GENERIC_OAUTH_CLIENT_ID=e7ce66495987dadcf3a8
-      - PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET=17bbad632e5044f07d2b9286a35fdcb7af0f3392
-      # - PROVIDERS_GENERIC_OAUTH_SCOPE=profile
-      - WHITELIST=paustin@eoas.ubc.ca
-      - SECRET='b56aa462a88ce5239fcdfc9e8af88689'
+      - PROVIDERS_GENERIC_OAUTH_CLIENT_ID
+      - PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET
+      - WHITELIST
+      - SECRET
     labels:
       - "traefik.http.middlewares.traefik2-forward-auth.forwardauth.address=http://traefik2-forward-auth:4181"
       - "traefik.http.middlewares.traefik2-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User"
