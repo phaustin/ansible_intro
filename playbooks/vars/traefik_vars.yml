@@ -21,7 +21,7 @@ traefik_template_list:
   - { src: "templates/traefik/middleware.j2" , dest: "{{ git_remote_path }}/traefik/config/dynamic/middleware.yml" }
   - { src: "templates/traefik/routers.j2" , dest: "{{ git_remote_path }}/traefik/config/dynamic/routers.yml" }
   - { src: "templates/traefik/docker-compose-google-oauth.j2" , dest: "{{ git_remote_path }}/docker-compose-google-proxy.yml" }
-  - { src: "templates/traefik/docker-compose-github-oauth.j2" , dest: "{{ git_remote_path }}/docker-compose-github-proxy.yml" }
+  - { src: "templates/traefik/docker-compose-github-oauth.j2", dest: "{{ git_remote_path }}/docker-compose-github-proxy.yml" }
 
 
 

@@ -29,29 +29,32 @@ services:
       - traefik.http.routers.whoami.tls.certresolver=lets-encrypt
       - traefik.http.routers.whoami.service=whoami
       - traefik.http.services.whoami.loadbalancer.server.port=80
-      - "traefik.http.routers.whoami.middlewares=traefik-forward-auth"
+      - "traefik.http.routers.whoami.middlewares=traefik2-forward-auth"
     container_name: whoami
 
-  traefik-forward-auth:
-    image: thomseddon/traefik-forward-auth:2
+  traefik2-forward-auth:
+    build:
+      context: forward_auth_folder
+    image: phaustin/traefik-forward-pha:test
     environment:
-      - DEFAULT_PROVIDER=oidc
-      - PROVIDERS_GENERIC_OAUTH_AUTH_URL="https://github.com/login/oauth/authorize"
-      - PROVIDERS_GENERIC_OAUTH_TOKEN_URL="https://github.com/login/oauth/access_token"
-      - PROVIDERS_GENERIC_OAUTH_USER_URL="https://api.github.com/user"
+      - DEFAULT_PROVIDER=generic-oauth
+      - INSECURE_COOKIE=false # Example assumes no https, do not use in production
+      - PROVIDERS_GENERIC_OAUTH_AUTH_URL=https://github.com/login/oauth/authorize
+      - PROVIDERS_GENERIC_OAUTH_TOKEN_URL=https://github.com/login/oauth/access_token
+      - PROVIDERS_GENERIC_OAUTH_USER_URL=https://api.github.com/user
       - PROVIDERS_GENERIC_OAUTH_CLIENT_ID
       - PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET
       - WHITELIST
       - SECRET
-      - INSECURE_COOKIE=false # Example assumes no https, do not use in production
-      - LOG_LEVEL=debug
     labels:
-      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.address=http://traefik-forward-auth:4181"
-      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User"
-      - "traefik.http.services.traefik-forward-auth.loadbalancer.server.port=4181"
+      - "traefik.http.middlewares.traefik2-forward-auth.forwardauth.address=http://traefik2-forward-auth:4181"
+      - "traefik.http.middlewares.traefik2-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User"
+      - "traefik.http.services.traefik2-forward-auth.loadbalancer.server.port=4181"
       - traefik.enable=true
     networks:
       - traefik_net
+    container_name: forward_auth2
+
   
 
 networks:
