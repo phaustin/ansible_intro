@@ -35,7 +35,7 @@ services:
   traefik2-forward-auth:
     build:
       context: forward_auth_folder
-    image: phaustin/traefik-forward-pha:test
+    image: phaustin/traefik-forward-auth:pr159
     environment:
       - DEFAULT_PROVIDER=generic-oauth
       - INSECURE_COOKIE=false # Example assumes no https, do not use in production
@@ -46,6 +46,7 @@ services:
       - PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET
       - WHITELIST
       - SECRET
+      - USER_ID_PATH=login
     labels:
       - "traefik.http.middlewares.traefik2-forward-auth.forwardauth.address=http://traefik2-forward-auth:4181"
       - "traefik.http.middlewares.traefik2-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User"
