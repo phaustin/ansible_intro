@@ -18,6 +18,12 @@
         dest: '{{ git_remote_path }}/jupyterhub/{{ hub_service_name }}_image/user_list.txt'
         decrypt: yes
         backup: no
+    - name: decrypt and copy user_list_sytemd.txt
+      copy:
+        src: 'files/jupyterhub/vault_user_list_systemd.txt'
+        dest: '{{ git_remote_path }}/jupyterhub/{{ hub_service_name }}_image/user_list_systemd.txt'
+        decrypt: yes
+        backup: no
         
 
 

@@ -8,9 +8,9 @@
     - name: start jupyterhub
       shell: "docker-compose -f docker-compose-jupyterhub.yml up -d"
       environment:
-        OAUTH_CALLBACK_URL: "{{ OAUTH_CALLBACK_URL }}"
-        OAUTH_CLIENT_ID: "{{ GITHUB_CLIENT_ID }}"
-        OAUTH_CLIENT_SECRET: "{{ GITHUB_CLIENT_SECRET }}"
+        JHUB_OAUTH_CALLBACK_URL: "{{ JHUB_OAUTH_CALLBACK_URL  }}"
+        JHUB_OAUTH_CLIENT_ID: "{{ vault_jhub_oauth_client_id  }}"
+        JHUB_OAUTH_CLIENT_SECRET: "{{ vault_jhub_oauth_client_secret }}"
       register: jupyterhub_status
       args:
         chdir: "{{ git_remote_path }}/jupyterhub"

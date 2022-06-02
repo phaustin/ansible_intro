@@ -1,0 +1,22 @@
+---
+- hosts: all
+  vars_files:
+    - vars/jovyan_vars.yml
+    - vars/traefik_vars.yml
+    - vars/vault.yml
+  tasks:
+    - name: start traefik
+      shell: "docker-compose -f docker-compose-noauth.yml up -d"
+      environment:
+        DO_AUTH_TOKEN: "{{ vault_do_auth_token }}"
+        # using traefik-forward-auth
+      register: envvar_test
+      args:
+        chdir: "{{ git_remote_path }}"
+        executable: /bin/bash
+
+    # - name: print envvar result
+    #   debug:
+    #     msg: "stdout: {{ envvar_test.stdout }}"
+
+

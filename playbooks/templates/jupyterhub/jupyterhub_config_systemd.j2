@@ -1,11 +1,17 @@
-from oauthenticator.github import GitHubOAuthenticator
+from oauthenticator.github import (GitHubOAuthenticator,
+                                   LocalGitHubOAuthenticator)
+                                   
 from pathlib import Path
 import os
 
 # dummy for testing. Don't use this in production!
 # c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
-from oauthenticator.github import GitHubOAuthenticator
-c.JupyterHub.authenticator_class = GitHubOAuthenticator
+# from oauthenticator.github import GitHubOAuthenticator
+# c.JupyterHub.authenticator_class = GitHubOAuthenticator
+
+c.JupyterHub.authenticator_class = LocalGitHubOAuthenticator
+c.LocalGitHubOAuthenticator.create_system_users = False
+
 
 # launch with docker
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
@@ -36,23 +42,35 @@ c.GitHubOAuthenticator.client_id = os.environ['JHUB_OAUTH_CLIENT_ID']
 c.GitHubOAuthenticator.client_secret = os.environ['JHUB_OAUTH_CLIENT_SECRET']
 c.Authenticator.allowed_users = allowed = set()
 c.Authenticator.admin_users = admin = set()
+c.LocalGitHubOAuthenticator.uids = uids = dict()
+
+c.SystemUserSpawner.host_homedir_format_string = '/data/jupyterhub/users/{username}'
+c.Authenticator.add_user_cmd = ['adduser', '-q', '-gecos', '""', '-home', '/data/jupyterhub/users/USERNAME', '-disabled-password']
 
 curr_dir = Path()
 user_list = curr_dir / 'user_list.txt'
-
 
 
 with open(user_list,'r') as f:
    all_lines=f.readlines()
    for the_line in all_lines:
       parts=the_line.split(';')
-      username=parts[0].strip()
+      username=parts[1].strip().lower()
       allowed.add(username)
-      if len(parts) > 1:
-         part2 = parts[1].strip()
+      uid = int(parts[0]) + 300000
+      if len(parts) > 2:
+         part2 = parts[2].strip()
          if part2 == 'admin':
             admin.add(username)
-         
+      uids[name] = uid
+
+# enable disk quotas
+from subprocess import check_call
+def pre_spawn_hook(spawner):
+    user = spawner.user.name
+    # 1G soft + 2G hard quota
+    check_call(["setquota", "-u", user, "524288", "2097152", "0", "0", "/host_root/"])
+
 with open(curr_dir / 'dump.txt','w') as out:
    out.write("hello\n\n")
    out.write(f"{all_lines}\n\n")
