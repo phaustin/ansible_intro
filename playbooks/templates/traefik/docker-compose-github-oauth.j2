@@ -9,7 +9,7 @@ services:
       - 80:80
       - 443:443
     networks:
-      - traefik_net
+      - {{ network_name }}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PWD}/traefik/config:/etc/traefik
@@ -19,7 +19,7 @@ services:
   whoami:
     image: "containous/whoami"    
     networks:
-      - traefik_net
+      - {{ network_name }}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
@@ -31,7 +31,10 @@ services:
       - traefik.http.services.whoami.loadbalancer.server.port=80
       - "traefik.http.routers.whoami.middlewares=traefik2-forward-auth"
     container_name: whoami
-
+#
+# use github user id via
+# https://github.com/thomseddon/traefik-forward-auth/pull/159
+#
   traefik2-forward-auth:
     build:
       context: forward_auth_folder
@@ -53,13 +56,14 @@ services:
       - "traefik.http.services.traefik2-forward-auth.loadbalancer.server.port=4181"
       - traefik.enable=true
     networks:
-      - traefik_net
+      - {{ network_name }}
     container_name: forward_auth2
 
   
 
 networks:
-    traefik_net:
+    {{ network_name }}:
       driver: bridge
-      name: traefik_net
+      name: {{ network_name }}
+
 

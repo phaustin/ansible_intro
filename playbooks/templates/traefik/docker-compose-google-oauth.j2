@@ -19,7 +19,7 @@ services:
   whoami:
     image: "containous/whoami"    
     networks:
-      - traefik_net
+      - {{ network_name }}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
@@ -47,9 +47,13 @@ services:
       - traefik.enable=true
     container_name: ansible_forward_google
     networks:
-      - traefik_net
-  
+      - {{ network_name }}
 
+
+networks:
+    {{ network_name }}:
+      driver: bridge
+      name: {{ network_name }}
 networks:
     traefik_net:
       driver: bridge
