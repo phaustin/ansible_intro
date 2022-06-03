@@ -31,7 +31,10 @@ services:
       - traefik.http.services.whoami.loadbalancer.server.port=80
       - "traefik.http.routers.whoami.middlewares=traefik2-forward-auth"
     container_name: whoami
-
+#
+# use github user id via
+# https://github.com/thomseddon/traefik-forward-auth/pull/159
+#
   traefik2-forward-auth:
     build:
       context: forward_auth_folder
@@ -62,4 +65,5 @@ networks:
     traefik_net:
       driver: bridge
       name: traefik_net
+
 

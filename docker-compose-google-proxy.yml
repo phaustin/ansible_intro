@@ -48,8 +48,12 @@ services:
     container_name: ansible_forward_google
     networks:
       - traefik_net
-  
 
+
+networks:
+    traefik_net:
+      driver: bridge
+      name: traefik_net
 networks:
     traefik_net:
       driver: bridge
