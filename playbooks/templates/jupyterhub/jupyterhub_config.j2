@@ -40,11 +40,12 @@ c.Authenticator.admin_users = admin = set()
 curr_dir = Path()
 user_list = curr_dir / 'user_list.txt'
 
-
-
 with open(user_list,'r') as f:
    all_lines=f.readlines()
    for the_line in all_lines:
+      the_line=the_line.strip()
+      if len(the_line) < 1:
+         continue
       parts=the_line.split(';')
       username=parts[0].strip()
       allowed.add(username)
@@ -52,7 +53,7 @@ with open(user_list,'r') as f:
          part2 = parts[1].strip()
          if part2 == 'admin':
             admin.add(username)
-         
+            
 with open(curr_dir / 'dump.txt','w') as out:
    out.write("hello\n\n")
    out.write(f"{all_lines}\n\n")
