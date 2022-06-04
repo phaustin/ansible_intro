@@ -13,8 +13,14 @@
         "{{ website_template_list }}"
     - name: make the html source folder
       file:
-        path: "{{ git_remote_path }}/website/{{ book_path }}"
+        path: "{{ dest_dir }}"
         state: directory
+    - name: rsync the rendered book
+      ansible.posix.synchronize:
+        src: "{{ book_local_html }}"
+        dest: "{{ dest_dir }}"
+        group: "no"
+        
         
 
 

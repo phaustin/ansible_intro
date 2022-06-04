@@ -6,7 +6,7 @@ services:
     image: httpd:2.4.51
     container_name: {{ book_name }}_image
     volumes:
-      - {{ book_path }}:/usr/local/apache2/htdocs:ro
+      - {{ book_remote_html }}:/usr/local/apache2/htdocs:ro
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - traefik.enable=true
