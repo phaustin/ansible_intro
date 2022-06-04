@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  a301_book:
+    image: httpd:2.4.51
+    container_name: a301_book_image
+    volumes:
+      - ./book_html_source:/usr/local/apache2/htdocs:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.a301_book.rule=Host(`web.eoastest2.xyz`) && PathPrefix(`/a301`)"
+      - traefik.http.routers.a301_book.tls=true
+      - traefik.http.routers.a301_book.tls.certresolver=lets-encrypt
+      - traefik.http.routers.a301_book.service=a301_book
+      - traefik.http.services.a301_book.loadbalancer.server.port=80
+      - "traefik.http.routers.a301_book.middlewares=a301_book_chain"
+      - "traefik.http.middlewares.a301_book-stripprefix.stripprefix.prefixes=/a301"
+      - "traefik.http.middlewares.a301_book_chain.chain.middlewares=strip-prefix-start@file,strip-prefix-end@file,a301_book-stripprefix"
+    restart: on-failure
+    networks:
+      - traefik_net
+
+networks:
+    traefik_net:
+      external: true
