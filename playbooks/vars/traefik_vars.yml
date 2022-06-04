@@ -5,15 +5,15 @@
 #  - jinja2 template variables
 #
 root_domain: eoastest2.xyz
+web_domain: web.eoastest.xyz
 auth_domain: auth.{{ auth_domain }}
-path_prefix_whoami1: try1
-path_prefix_whoami2: try2
-path_prefix_whoami3: try3
+path_prefix_whoami1: whoami1
+path_prefix_whoami2: whoami2
 network_name: traefik_net
 traefik_forward_auth_service: traefik2-forward-auth
 traefik_forward_auth_container_name: forward_auth2
 lets_encrypt_email: paustin@eoas.ubc.ca
-user_and_pw: 'eoas:$2y$05$2N25nFVO13/Xxv4JUetyou5eo2xnrZ5rUHXJF0/P59gwZUGgZUdrC'
+dashboard_user_and_pw: 'eoas:$2y$05$2N25nFVO13/Xxv4JUetyou5eo2xnrZ5rUHXJF0/P59gwZUGgZUdrC'
 #
 # - src and dest loop for template
 #

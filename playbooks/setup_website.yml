@@ -11,7 +11,11 @@
         dest: '{{ item.dest }}'
       loop:
         "{{ website_template_list }}"
-
+    - name: make the html source folder
+      file:
+        path: "{{ git_remote_path }}/website/{{ book_path }}"
+        state: directory
+        
 
 
 
