@@ -6,7 +6,7 @@
     - vars/vault.yml
   tasks:
     - name: start traefik
-      shell: "docker-compose -f docker-compose-google-proxy.yml up -d"
+      shell: "docker-compose -f docker-compose-google-oauth.yml up -d"
       environment:
         DO_AUTH_TOKEN: "{{ vault_do_auth_token }}"
         # using traefik-forward-auth
