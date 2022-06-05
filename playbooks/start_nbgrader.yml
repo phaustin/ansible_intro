@@ -16,7 +16,7 @@
         WHITELIST: "{{ vault_nbgrader_github_whitelist }}"
       register: envvar_test
       args:
-        chdir: "{{ git_remote_path }}"
+        chdir: "{{ git_remote_path }}/nbgrader"
         executable: /bin/bash
 
     # - name: print envvar result

@@ -16,7 +16,7 @@ services:
       - traefik.http.routers.whoami3.service=whoami
       - traefik.http.services.whoami3.loadbalancer.server.port=80
       - "traefik.http.routers.whoami3.middlewares={{ nbgrader_forward_auth_service }}"
-    container_name: whoami
+    container_name: whoami3
 #
 # use github user id via
 # https://github.com/thomseddon/traefik-forward-auth/pull/159
