@@ -36,14 +36,17 @@ services:
 # https://github.com/thomseddon/traefik-forward-auth/pull/159
 #
   {{ traefik_forward_authhost_service }}:
-    image: phaustin/traefik-forward-auth:pr159
+    # image: phaustin/traefik-forward-auth:pr159
+    image: thomseddon/traefik-forward-auth:2
     environment:
       - DEFAULT_PROVIDER=generic-oauth
       - INSECURE_COOKIE=false # Example assumes no https, do not use in production
       - PROVIDERS_GENERIC_OAUTH_AUTH_URL=https://github.com/login/oauth/authorize
       - PROVIDERS_GENERIC_OAUTH_TOKEN_URL=https://github.com/login/oauth/access_token
       - PROVIDERS_GENERIC_OAUTH_USER_URL=https://api.github.com/user
-      - COOKIE_NAME=_github_authhost
+      - COOKIE_NAME=_github_testhost
+      - COOKIE_DOMAIN=eoastest2.xyz
+      - AUTH_HOST=auth.eoastest2.xyz
       - PROVIDERS_GENERIC_OAUTH_CLIENT_ID
       - PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET
       - WHITELIST
@@ -52,11 +55,15 @@ services:
     labels:
       - "traefik.http.middlewares.{{ traefik_forward_authhost_service }}.forwardauth.address=http://{{ traefik_forward_authhost_service }}:4181"
       - "traefik.http.middlewares.{{ traefik_forward_authhost_service }}.forwardauth.authResponseHeaders=X-Forwarded-User"
+      - "traefik.http.middlewares.{{ traefik_forward_authhost_service }}.forwardauth.trustForwardHeader=true"
       - "traefik.http.services.{{ traefik_forward_authhost_service }}.loadbalancer.server.port=4181"
-      - traefik.enable=true
+      - "traefik.http.routers.{{ traefik_forward_authhost_service }}.tls=true"
+      - "traefik.http.routers.{{ traefik_forward_authhost_service }}.tls.certresolver=lets-encrypt"
+      - "traefik.http.routers.{{ traefik_forward_authhost_service }}.rule=Host(`auth.eoastest2.xyz`)"
+      - "traefik.enable=true"
     networks:
       - {{ network_name }}
-    container_name: {{ traefik_forward_authhost_container_name }}
+    # container_name: {{ traefik_forward_authhost_container_name }}
 
 networks:
     {{ network_name }}:
