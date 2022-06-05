@@ -1,0 +1,16 @@
+---
+- hosts: all
+  vars_files:
+    - vars/jovyan_vars.yml
+    - vars/traefik_vars.yml
+    - vars/nbgrader_vars.yml
+    - vars/vault.yml
+  tasks:
+    - name: instantiate templates
+      template:
+        src: '{{ item.src }}'
+        dest: '{{ item.dest }}'
+      loop:
+        "{{ nbgrader_template_list }}"
+
+
