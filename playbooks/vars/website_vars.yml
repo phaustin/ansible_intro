@@ -2,12 +2,12 @@
 #
 #  - jinja2 template variables
 #
-book_domain: web.{{ root_domain }}
-book_name: a301_book
-book_remote_path: ./book_html_source
+book_domain: "web.{{ root_domain }}"
+book_name: "a301_book"
+book_remote_path: "./book_html_source"
 book_remote_html: "{{ book_remote_path }}/html"
 book_local_html: "/home/phil/repos/a301_2020/_build/html"
-book_prefix: /a301
+book_route: "/a301"
 dest_dir: "{{ git_remote_path }}/website/{{ book_remote_path }}"
 website_template_list:
   - { src: "templates/website/docker-compose-website.j2"  , dest: "{{ git_remote_path }}/website/docker-compose-website.yml" }

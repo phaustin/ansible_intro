@@ -20,8 +20,9 @@
         src: "{{ book_local_html }}"
         dest: "{{ dest_dir }}"
         group: "no"
-        
-        
+
+
+
 
 
 

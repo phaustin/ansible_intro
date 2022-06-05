@@ -5,7 +5,7 @@
 #  - jinja2 template variables
 #
 root_domain: eoastest2.xyz
-web_domain: web.eoastest.xyz
+web_domain: web.eoastest2.xyz
 auth_domain: auth.{{ auth_domain }}
 path_prefix_whoami1: whoami1
 path_prefix_whoami2: whoami2
@@ -24,6 +24,8 @@ traefik_template_list:
   - { src: "templates/traefik/docker-compose-noauth.j2" , dest: "{{ git_remote_path }}/docker-compose-noauth.yml" }
   - { src: "templates/traefik/docker-compose-google-oauth.j2" , dest: "{{ git_remote_path }}/docker-compose-google-proxy.yml" }
   - { src: "templates/traefik/docker-compose-github-oauth.j2", dest: "{{ git_remote_path }}/docker-compose-github-proxy.yml" }
+  - { src: "templates/traefik/docker-compose-intro-auth.j2", dest: "{{ git_remote_path }}/docker-compose-intro-auth.yml" }
+  
 
 
 
