@@ -2,21 +2,23 @@ version: '3.7'
 
 services:
 
-  whoami3:
-    image: "containous/whoami"    
+  nbgrader:
+    image: "phaustin/autotest:v0.1"    
     networks:
       - {{ network_name }}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./demo/source:/home/jovyan/source
+      - ./demo/release:/home/jovyan/release
     labels:
       - traefik.enable=true
-      - traefik.http.routers.whoami3.rule=Host(`{{ nbgrader_domain }}`)
-      - traefik.http.routers.whoami3.tls=true
-      - traefik.http.routers.whoami3.tls.certresolver=lets-encrypt
-      - traefik.http.routers.whoami3.service=whoami
-      - traefik.http.services.whoami3.loadbalancer.server.port=80
-      - "traefik.http.routers.whoami3.middlewares={{ nbgrader_forward_auth_service }}"
-    container_name: whoami3
+      - traefik.http.routers.nbgrader.rule=Host(`{{ nbgrader_domain }}`)
+      - traefik.http.routers.nbgrader.tls=true
+      - traefik.http.routers.nbgrader.tls.certresolver=lets-encrypt
+      - traefik.http.routers.nbgrader.service=whoami
+      - traefik.http.services.nbgrader.loadbalancer.server.port=8888
+      - "traefik.http.routers.nbgrader.middlewares={{ nbgrader_forward_auth_service }}"
+    container_name: nbgrader_container
 #
 # use github user id via
 # https://github.com/thomseddon/traefik-forward-auth/pull/159
