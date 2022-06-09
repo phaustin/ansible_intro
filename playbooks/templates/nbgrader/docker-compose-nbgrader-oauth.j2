@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
 
-  nbgrader:
+  {{ nbgrader_service }}:
     image: "phaustin/autotest:v0.1"    
     networks:
       - {{ network_name }}
@@ -15,10 +15,11 @@ services:
       - traefik.http.routers.nbgrader.rule=Host(`{{ nbgrader_domain }}`)
       - traefik.http.routers.nbgrader.tls=true
       - traefik.http.routers.nbgrader.tls.certresolver=lets-encrypt
-      - traefik.http.routers.nbgrader.service=whoami
+      - traefik.http.routers.nbgrader.service={{ nbgrader_service }}
       - traefik.http.services.nbgrader.loadbalancer.server.port=8888
       - "traefik.http.routers.nbgrader.middlewares={{ nbgrader_forward_auth_service }}"
-    container_name: nbgrader_container
+    command: ["jupyter", "notebook","--NotebookApp.token=''","--debug"]
+    container_name: {{ nbgrader_container }}
 #
 # use github user id via
 # https://github.com/thomseddon/traefik-forward-auth/pull/159
@@ -27,13 +28,13 @@ services:
     image: phaustin/traefik-forward-auth:pr159
     environment:
       - DEFAULT_PROVIDER=generic-oauth
-      - INSECURE_COOKIE=false # Example assumes no https, do not use in production
+      - INSECURE_COOKIE=false 
       - PROVIDERS_GENERIC_OAUTH_AUTH_URL=https://github.com/login/oauth/authorize
       - PROVIDERS_GENERIC_OAUTH_TOKEN_URL=https://github.com/login/oauth/access_token
       - PROVIDERS_GENERIC_OAUTH_USER_URL=https://api.github.com/user
       - PROVIDERS_GENERIC_OAUTH_CLIENT_ID
       - PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET
-      - COOKIE_NAME=_nbgrader_eoastest2
+      - COOKIE_NAME=_nbgrader_eoastest3
       - WHITELIST
       - SECRET
       - USER_ID_PATH=login

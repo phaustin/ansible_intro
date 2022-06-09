@@ -3,8 +3,10 @@
 #  - jinja2 template variables
 #
 nbgrader_domain: nbgrader.eoastest2.xyz
-nbgrader_forward_auth_service: nbgrader-forward-auth
-nbgrader_forward_auth_container_name: nbgrader-forward-auth-container
+nbgrader_forward_auth_service: nbgrader-forward-authII
+nbgrader_forward_auth_container_name: nbgrader-forward-auth-containerII
+nbgrader_service: nbgrader
+nbgrader_container: nbgrader_container
 nbgrader_template_list:
   - { src: "templates/nbgrader/docker-compose-nbgrader-oauth.j2"  , dest: "{{ git_remote_path }}/nbgrader/docker-compose-nbgrader-oauth.yml" }
 
