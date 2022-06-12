@@ -10,6 +10,7 @@
       file:
         path: "{{ git_remote_path }}/nbgrader/demo/{{ nbgrader_exchange_dir }}"
         state: directory
+        mode: '777'
     - name: instantiate templates
       template:
         src: '{{ item.src }}'

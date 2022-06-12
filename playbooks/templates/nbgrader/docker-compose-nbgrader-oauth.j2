@@ -4,16 +4,9 @@ version: '3.7'
 services:
 
   {{ nbgrader_service }}:
-<<<<<<< HEAD
-    image: "phaustin/autotest:v0.4"
-    init: true
-    build:
-        context: demo
-=======
     image: {{ nbgrader_image }}
     build:
         context: nbgrader_image
->>>>>>> nbgrader
     networks:
       - {{ network_name }}
     volumes:
