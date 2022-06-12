@@ -9,6 +9,7 @@ nbgrader_service: nbgrader
 nbgrader_container: nbgrader_container
 nbgrader_template_list:
   - { src: "templates/nbgrader/docker-compose-nbgrader-oauth.j2"  , dest: "{{ git_remote_path }}/nbgrader/docker-compose-nbgrader-oauth.yml" }
+  - { src: "templates/nbgrader/nbgrader_dockerfile.j2"  , dest: "{{ git_remote_path }}/nbgrader/demo/Dockerfile" }
 
 
 

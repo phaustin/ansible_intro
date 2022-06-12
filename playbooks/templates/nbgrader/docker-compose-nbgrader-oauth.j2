@@ -1,9 +1,13 @@
 version: '3.7'
+# https://docs.docker.com/compose/compose-file/#init
 
 services:
 
   {{ nbgrader_service }}:
-    image: "phaustin/autotest:v0.3"    
+    image: "phaustin/autotest:v0.4"
+    init: true
+    build:
+        context: demo
     networks:
       - {{ network_name }}
     volumes:
