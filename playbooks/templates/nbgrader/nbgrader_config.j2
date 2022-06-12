@@ -8,7 +8,7 @@ root_dir = Path()
 assign_db = (root_dir / gradebook).resolve()
 
 db_url = f"sqlite:///{str(assign_db)}"
-exchange_dir = root_dir / Path("{{ exchange_dir }}")
+exchange_dir = root_dir / Path("{{ nbgrader_exchange_dir }}")
 
 print(f"assignment db is {assign_db}")
 
@@ -19,7 +19,7 @@ c.CourseDirectory.root = str(root_dir)
 print(f"setting root to {c.CourseDirectory.root}")
 c.ExecutePreprocessor.timeout = 300
 
-c.CourseDirectory.course_id = f"{str(exchange_dir}"
+c.CourseDirectory.course_id = f"{str(exchange_dir)}"
 c.Exchange.root = str(root_dir)
 print(f"in nbgrader_config.py: setting exchange to {c.Exchange.root}")
 

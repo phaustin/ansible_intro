@@ -4,16 +4,23 @@ version: '3.7'
 services:
 
   {{ nbgrader_service }}:
+<<<<<<< HEAD
     image: "phaustin/autotest:v0.4"
     init: true
     build:
         context: demo
+=======
+    image: {{ nbgrader_image }}
+    build:
+        context: nbgrader_image
+>>>>>>> nbgrader
     networks:
       - {{ network_name }}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./demo/source:/home/jovyan/source
       - ./demo/release:/home/jovyan/release
+      - ./demo/{{ nbgrader_exchange_dir }}:/home/jovyan/{{ nbgrader_exchange_dir }}
       - $HOME/eosc211:/home/jovyan/eosc211
     labels:
       - traefik.enable=true

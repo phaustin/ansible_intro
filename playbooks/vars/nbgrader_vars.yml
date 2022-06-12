@@ -7,9 +7,15 @@ nbgrader_forward_auth_service: nbgrader-forward-authII
 nbgrader_forward_auth_container_name: nbgrader-forward-auth-containerII
 nbgrader_service: nbgrader
 nbgrader_container: nbgrader_container
+nbgrader_image: nbgrader_image
+nbgrader_exchange_dir: EOSC211_exchange
 nbgrader_template_list:
   - { src: "templates/nbgrader/docker-compose-nbgrader-oauth.j2"  , dest: "{{ git_remote_path }}/nbgrader/docker-compose-nbgrader-oauth.yml" }
+<<<<<<< HEAD
   - { src: "templates/nbgrader/nbgrader_dockerfile.j2"  , dest: "{{ git_remote_path }}/nbgrader/demo/Dockerfile" }
+=======
+  - { src: "templates/nbgrader/nbgrader_config.j2"  , dest: "{{ git_remote_path }}/nbgrader/nbgrader_image/nbgrader_config.py" }
+>>>>>>> nbgrader
 
 
 

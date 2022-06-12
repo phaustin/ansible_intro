@@ -6,6 +6,10 @@
     - vars/nbgrader_vars.yml
     - vars/vault.yml
   tasks:
+    - name: create exchange)_dir
+      file:
+        path: "{{ git_remote_path }}/nbgrader/demo/{{ nbgrader_exchange_dir }}"
+        state: directory
     - name: instantiate templates
       template:
         src: '{{ item.src }}'
