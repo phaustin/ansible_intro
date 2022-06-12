@@ -6,7 +6,7 @@
     - vars/nbgrader_vars.yml
     - vars/vault.yml
   tasks:
-    - name: create exchange)_dir
+    - name: create exchange_dir
       file:
         path: "{{ git_remote_path }}/nbgrader/demo/{{ nbgrader_exchange_dir }}"
         state: directory
