@@ -1,0 +1,8 @@
+format: jb-book
+root: intro.md
+parts:
+  - caption: Week 1 - Introduction
+    chapters:
+      - file: traefik.md
+
+
