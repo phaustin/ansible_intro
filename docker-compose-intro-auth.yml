@@ -1,0 +1,61 @@
+version: '3.7'
+
+services:
+  traefik:
+    # The official v2 Traefik docker image
+    image: traefik:v2.7
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker --api.dashboard=true
+    ports:
+      - "80:80"
+      - "8080:8080"      # The HTTP port
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+    container_name: traefik
+    restart: always
+
+  whoami:
+    image: "containous/whoami"    
+    networks:
+      - traefik_net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami.rule=Host(`web.eoastest2.xyz`)
+      - traefik.http.routers.whoami.service=whoami
+      - traefik.http.services.whoami.loadbalancer.server.port=80
+      - "traefik.http.routers.whoami.middlewares=traefik2-forward-auth"
+    container_name: whoami
+#
+# use github user id via
+# https://github.com/thomseddon/traefik-forward-auth/pull/159
+#
+  traefik2-forward-auth:
+    image: phaustin/traefik-forward-auth:pr159
+    environment:
+      - DEFAULT_PROVIDER=generic-oauth
+      - PROVIDERS_GENERIC_OAUTH_AUTH_URL=https://github.com/login/oauth/authorize
+      - PROVIDERS_GENERIC_OAUTH_TOKEN_URL=https://github.com/login/oauth/access_token
+      - PROVIDERS_GENERIC_OAUTH_USER_URL=https://api.github.com/user
+      - PROVIDERS_GENERIC_OAUTH_CLIENT_ID=e7ce66495987dadcf3a8
+      - PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET=57252ace2b4833152d236f5a1290d23536cf710f
+      - SECRET=b65e4562a88ce5239fcdfc9e8af88689
+      - INSECURE_COOKIE="true" # Example assumes no https, do not use in production
+      - USER_ID_PATH=login
+    labels:
+      - "traefik.http.middlewares.traefik2-forward-auth.forwardauth.address=http://traefik2-forward-auth:4181"
+      - "traefik.http.middlewares.traefik2-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User"
+      - "traefik.http.services.traefik2-forward-auth.loadbalancer.server.port=4181"
+      - traefik.enable=true
+    networks:
+      - traefik_net
+    container_name: forward_auth2
+
+networks:
+    traefik_net:
+      driver: bridge
+      name: traefik_net
+
+

@@ -1,0 +1,60 @@
+version: '3.7'
+# https://docs.docker.com/compose/compose-file/#init
+
+services:
+
+  nbgrader:
+    image: nbgrader_image
+    build:
+        context: nbgrader_image
+    networks:
+      - traefik_net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./demo/source:/home/jovyan/source
+      - ./demo/release:/home/jovyan/release
+      - ./demo/EOSC211_exchange:/home/jovyan/EOSC211_exchange
+      - $HOME/eosc211:/home/jovyan/eosc211
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nbgrader.rule=Host(`nbgrader.eoastest2.xyz`)
+      - traefik.http.routers.nbgrader.tls=true
+      - traefik.http.routers.nbgrader.tls.certresolver=lets-encrypt
+      - traefik.http.routers.nbgrader.service=nbgrader
+      - traefik.http.services.nbgrader.loadbalancer.server.port=8888
+      - "traefik.http.routers.nbgrader.middlewares=nbgrader-forward-authII"
+    command: ["jupyter", "notebook","--NotebookApp.token=''","--debug"]
+    container_name: nbgrader_container
+#
+# use github user id via
+# https://github.com/thomseddon/traefik-forward-auth/pull/159
+#
+  nbgrader-forward-authII:
+    image: phaustin/traefik-forward-auth:pr159
+    environment:
+      - DEFAULT_PROVIDER=generic-oauth
+      - INSECURE_COOKIE=false 
+      - PROVIDERS_GENERIC_OAUTH_AUTH_URL=https://github.com/login/oauth/authorize
+      - PROVIDERS_GENERIC_OAUTH_TOKEN_URL=https://github.com/login/oauth/access_token
+      - PROVIDERS_GENERIC_OAUTH_USER_URL=https://api.github.com/user
+      - PROVIDERS_GENERIC_OAUTH_CLIENT_ID
+      - PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET
+      - COOKIE_NAME=_nbgrader_eoastest3
+      - WHITELIST
+      - SECRET
+      - USER_ID_PATH=login
+    labels:
+      - "traefik.http.middlewares.nbgrader-forward-authII.forwardauth.address=http://nbgrader-forward-authII:4181"
+      - "traefik.http.middlewares.nbgrader-forward-authII.forwardauth.authResponseHeaders=X-Forwarded-User"
+      - "traefik.http.services.nbgrader-forward-authII.loadbalancer.server.port=4181"
+      - traefik.enable=true
+    networks:
+      - traefik_net
+    container_name: nbgrader-forward-auth-containerII
+
+networks:
+    traefik_net:
+      driver: bridge
+      name: traefik_net
+
+
