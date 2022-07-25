@@ -3,6 +3,10 @@
   vars_files:
     - vars/jovyan_vars.yml
   pre_tasks:
+    - name: folder to install micromaba
+      file:
+        path: "~/bin"
+        state: directory
     - name: copy condarc
       copy:
         src: 'files/conda/condarc.yml'
@@ -23,7 +27,10 @@
         packages:
           - mamba
           - python=3.10
+          - conda-lock
           - git
           - gh-scoped-creds
-
+          
+# https://github.com/mamba-org/ansible-role-micromamba
+# ansible-playbook -i ~/repos/ubc-jupyter/ansible/hosts.yml -l dash -u jovyan setup_conda.yml 
 
