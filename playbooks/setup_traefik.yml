@@ -11,5 +11,5 @@
         dest: '{{ item.dest }}'
       loop:
         "{{ traefik_template_list }}"
-
+# ansible-playbook 
 
