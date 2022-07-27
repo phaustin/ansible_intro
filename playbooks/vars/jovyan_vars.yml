@@ -4,8 +4,8 @@
 #
 new_user: 'jovyan'
 new_group: 'jovyan'
-new_user_uid: '1002'
-new_user_gid: '1004'
+new_user_uid: '1003'
+new_user_gid: '2000'
 #
 #  setup_docker.yml
 #
@@ -28,4 +28,4 @@ git_email:
 github_repo:
   "https://github.com/phaustin/ubc-jupyter.git"
 git_remote_repos: "~/repos"
-git_remote_path: "{{ git_remote_repos }}/ubc-jupyter"
+git_remote_path: "{{ git_remote_repos }}/ansible_intro"

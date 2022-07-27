@@ -1,0 +1,15 @@
+---
+#
+#  - jinja2 template variables
+#
+book_remote_path: "./book_html_source"
+git_remote_path: "{{ git_remote_repos }}/ansible_intro"
+website_dir: "{{ git_remote_path }}/website_e211"
+book_domain: "courses.{{ root_domain }}"
+book_prefix: "/e211"
+book_local_html: "/home/phil/repos/eosc211_students/_build/html/"
+book_remote_html: "{{ website_dir }}/html/"
+dest_dir: "{{ git_remote_path }}/{{ website_dir }}/{{ book_remote_path }}"
+website_template_list:
+  - { src: "templates/website/docker-compose-website_noauth.j2"  , dest: "{{ website_dir }}/docker-compose-website.yml" }
+
