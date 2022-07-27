@@ -4,7 +4,7 @@
 http:
   routers:
     api:
-      rule: Host(`eoastest2.xyz`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      rule: Host(`eoastestb.xyz`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
       service: api@internal
       entrypoints:
         - websecure
