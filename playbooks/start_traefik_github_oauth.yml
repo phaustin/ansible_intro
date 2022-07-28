@@ -11,10 +11,10 @@
       environment:
         DO_AUTH_TOKEN: "{{ vault_do_auth_token }}"
         # using traefik-forward-auth
-        PROVIDERS_GENERIC_OAUTH_CLIENT_ID: "{{ vault_web_github_client_id }}"
-        PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET: "{{ vault_web_github_client_secret }}"
-        SECRET: "{{ vault_web_github_cookie_secret }}"
-        WHITELIST: "{{ vault_web_github_whitelist }}"
+        PROVIDERS_GENERIC_OAUTH_CLIENT_ID: "{{ vault_traefik_github_client_id }}"
+        PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET: "{{ vault_traefik_github_client_secret }}"
+        SECRET: "{{ vault_traefik_github_cookie_secret }}"
+        WHITELIST: "{{ vault_traefik_github_whitelist }}"
       register: envvar_test
       args:
         chdir: "{{ git_remote_path }}"

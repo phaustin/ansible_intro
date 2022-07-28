@@ -5,7 +5,7 @@
 #  - jinja2 template variables
 #
 root_domain: eoastestb.xyz
-web_domain: hub.eoastestb.xyz
+web_domain: web.eoastestb.xyz
 path_prefix_whoami1: whoami1
 path_prefix_whoami2: whoami2
 network_name: traefik_net

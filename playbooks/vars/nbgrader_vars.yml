@@ -2,9 +2,9 @@
 #
 #  - jinja2 template variables
 #
-nbgrader_domain: nbgrader.eoastest2.xyz
-nbgrader_forward_auth_service: nbgrader-forward-authII
-nbgrader_forward_auth_container_name: nbgrader-forward-auth-containerII
+nbgrader_domain: nbgrader.eoastestb.xyz
+nbgrader_forward_auth_service: nbgrader-forward-auth
+nbgrader_forward_auth_container_name: nbgrader-forward-auth-container
 nbgrader_service: nbgrader
 nbgrader_container: nbgrader_container
 nbgrader_image: nbgrader_image
