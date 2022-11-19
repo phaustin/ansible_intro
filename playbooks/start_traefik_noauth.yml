@@ -1,8 +1,9 @@
 ---
 - hosts: all
   vars_files:
+    # traefik_git_remote_path
     - vars/jovyan_vars.yml
-    - vars/traefik_vars.yml
+    # vault_do_auth_token
     - vars/vault.yml
   tasks:
     - name: start traefik
@@ -12,7 +13,7 @@
         # using traefik-forward-auth
       register: envvar_test
       args:
-        chdir: "{{ git_remote_path }}"
+        chdir: "{{ traefik_git_remote_path }}"
         executable: /bin/bash
 
     # - name: print envvar result

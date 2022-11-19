@@ -4,8 +4,8 @@
 #
 new_user: 'jovyan'
 new_group: 'jovyan'
-new_user_uid: '1003'
-new_user_gid: '2000'
+new_user_uid: '100'
+new_user_gid: '2005'
 #
 #  setup_docker.yml
 #
@@ -25,7 +25,11 @@ git_username:
   "Phil Austin"
 git_email:
   "paustin@eoas.ubc.ca"
-github_repo:
-  "https://github.com/phaustin/ubc-jupyter.git"
+ansible_github_repo:
+  "https://github.com/phaustin/ansible_intro.git"
+traefik_github_repo:
+  "https://github.com/phaustin/ocese_traefik.git"
 git_remote_repos: "~/repos"
-git_remote_path: "{{ git_remote_repos }}/ansible_intro"
+ansible_git_remote_path: "{{ git_remote_repos }}/ansible_intro"
+traefik_git_remote_path: "{{ git_remote_repos }}/ocese_traefik"
+traefik_git_branch: "main"

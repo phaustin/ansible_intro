@@ -10,6 +10,17 @@ services:
       - 443:443
     networks:
       - {{ network_name }}
+    labels:
+      - traefik.enable=true
+      #___ set traefik dashboard + API. The API is available at: mydomain.club/api/http/routers
+      - "traefik.http.routers.traefik.rule=Host(`{{ root_domain }}`) && (PathPrefix(`/traefik`) || PathPrefix(`/api`))"
+      - "traefik.http.routers.traefik.service=api@internal"
+      #___ set TLS (https)
+      - "traefik.http.routers.traefik.tls=true"  
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      #___ specific middleware for traefik (it enables the dashboard at mydomain.com/traefik)
+      - "traefik.http.routers.traefik.middlewares=traefik-strip,dashboardAuth@file" 
+      - "traefik.http.middlewares.traefik-strip.stripprefix.prefixes=/traefik"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PWD}/traefik/config:/etc/traefik

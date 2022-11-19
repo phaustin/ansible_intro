@@ -1,11 +1,25 @@
 ---
 - hosts: all
   vars_files:
+    # new_user, ansible_github_repo,traefik_github_repo
+    # ansible_git_remote_path,traefik_git_remote_path
+    # traefik_git_branch
     - vars/jovyan_vars.yml
+    # traefik_template_list
     - vars/traefik_vars.yml
-    - vars/vault.yml
   tasks:
-    - name: move proxy templates to ~/repos/addon_containers
+    - name: Create a ~/repos directory if it does not exist
+      ansible.builtin.file:
+        path: "~/repos"
+        owner: "{{ new_user }}"
+        state: directory
+        mode: '0755'
+    - name: checkout git repo ocese_traefik
+      ansible.builtin.git:
+        repo: "{{ traefik_github_repo }}"
+        dest: "{{ traefik_git_remote_path }}"
+        version: "{{ traefik_git_branch }}"
+    - name: move proxy templates to ~/repos/ocese_traefik
       template:
         src: '{{ item.src }}'
         dest: '{{ item.dest }}'
