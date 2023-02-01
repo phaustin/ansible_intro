@@ -5,6 +5,17 @@ services:
     environment:
       - DO_AUTH_TOKEN
     image: "traefik:v2.5"
+    labels:
+      - traefik.enable=true
+      #___ set traefik dashboard + API. The API is available at: mydomain.club/api/http/routers
+      - "traefik.http.routers.traefik.rule=Host(`eoastest.xyz`) && (PathPrefix(`/traefik`) || PathPrefix(`/api`))"
+      - "traefik.http.routers.traefik.service=api@internal"
+      #___ set TLS (https)
+      - "traefik.http.routers.traefik.tls=true"  
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      #___ specific middleware for traefik (it enables the dashboard at mydomain.com/traefik)
+      - "traefik.http.routers.traefik.middlewares=traefik-strip,dashboardAuth@file" 
+      - "traefik.http.middlewares.traefik-strip.stripprefix.prefixes=/traefik"
     ports:
       - 80:80
       - 443:443
@@ -24,7 +35,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - traefik.enable=true
-      - traefik.http.routers.whoami.rule=Host(`hub.eoastest2.xyz`)
+      - traefik.http.routers.whoami.rule= Host(`eoastest.xyz`) && PathPrefix(`/whoami`)
       - traefik.http.routers.whoami.tls=true
       - traefik.http.routers.whoami.tls.certresolver=lets-encrypt
       - traefik.http.routers.whoami.service=whoami
