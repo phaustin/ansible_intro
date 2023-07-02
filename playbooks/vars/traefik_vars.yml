@@ -4,8 +4,8 @@
 #
 #  - jinja2 template variables
 #
-root_domain: eoastestb.xyz
-web_domain: web.eoastestb.xyz
+root_domain: eoastest.xyz
+web_domain: web.eoastest.xyz
 auth_domain: auth.{{ root_domain }}
 path_prefix_whoami1: whoami1
 path_prefix_whoami2: whoami2
