@@ -84,7 +84,7 @@
     - name: Set authorized keys for remote user
       vars:
         key_path:
-          - '/.ssh/do1_feb27.pub'
+          - "{{ ssh_pub_key }}"
       ansible.posix.authorized_key:
         user: "{{ new_user }}"
         state: present

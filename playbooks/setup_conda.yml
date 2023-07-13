@@ -32,5 +32,5 @@
           - gh-scoped-creds
           
 # https://github.com/mamba-org/ansible-role-micromamba
-# ansible-playbook -i ~/repos/ubc-jupyter/ansible/hosts.yml -l dash -u jovyan setup_conda.yml 
+# ansible-playbook -i playbooks/hosts.yml -l do1x -u jovyan setup_conda.yml 
 

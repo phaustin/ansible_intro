@@ -4,7 +4,7 @@ This repository contains a set of ansible playbooks that builds a docker-powered
 
 ## Prerequisites
 
-* An Ubuntu 20.04 droplet on Digital Ocean (Regular, 2 Gbytes Ram, 50 Gbyte SSD, $US 0.015/hour)
+* An Ubuntu 22.04 droplet on Digital Ocean (Regular, 2 Gbytes Ram, 50 Gbyte SSD, $US 0.015/hour)
 * A domain name managed by Digital Ocean ($1/12 months at https://www.namecheap.com/ )
 * A Digital Ocean Personal Access api token
 

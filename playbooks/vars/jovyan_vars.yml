@@ -6,6 +6,7 @@ new_user: 'jovyan'
 new_group: 'jovyan'
 new_user_uid: '1003'
 new_user_gid: '2000'
+ssh_pub_key: '/.ssh/do1_feb27.pub'
 #
 #  setup_docker.yml
 #
@@ -17,6 +18,8 @@ conda_prefix: ~/mini3_10
 python_version: 3.10
 #
 # setup_git.yml
+# python package to allow pushing to github from remote
+# https://github.com/jupyterhub/gh-scoped-creds
 #
 gitcreds: |
   export GH_SCOPED_CREDS_CLIENT_ID=Iv1.a7bfeeb8a061168a
@@ -26,6 +29,6 @@ git_username:
 git_email:
   "paustin@eoas.ubc.ca"
 github_repo:
-  "https://github.com/phaustin/ubc-jupyter.git"
+  "https://github.com/phaustin/ansible_intro.git"
 git_remote_repos: "~/repos"
 git_remote_path: "{{ git_remote_repos }}/ansible_intro"
